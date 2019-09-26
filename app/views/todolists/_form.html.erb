@@ -1,0 +1,7 @@
+<%= form_for :search,:url=>{:controller=>"todolists",:action=>"search"}, remote: true do |form|%>
+  <%= form.text_field :search , placeholder: "search", class: "search"%>
+<%end%>
+
+<%= form_with scope: :todolist, url: todolists_path, remote: true do |form| %>
+  <%= form.text_field :body , placeholder: "enter your todo", class: "createtodo"%>
+<% end %>

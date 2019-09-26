@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container">
+  <div class="login">
+    <% if user_signed_in? %>
+      <strong><%= current_user.email %></strong>
+      <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link' %>
+    <% end %>
+  </div>
+  <%= render 'form' %>
+  <div class="switch-field">
+    <input type="radio" id="radio-one" name="switch-one" value="active" checked="checked"/>
+    <label for="radio-one">Active</label>
+    <input type="radio" id="radio-two" name="switch-one" value="inactive"/>
+    <label for="radio-two">Inactive</label>
+  </div>
+
+  <% @todolists.each do |todo| %>
+    <div class="posttodo">
+      <div class="names">
+        <div class="todobody"><%= todo.body %></div>
+        <div id="switches">
+          <a href="#">
+            <i class="fa fa-angle-up" style="font-size:36px"></i>
+          </a>
+          <a href="#">
+            <i class="fa fa-angle-down" style="font-size:36px"></i>
+          </a>
+          <%= link_to '<i class="fa fa-close" style="font-size:24px"></i>'.html_safe, todolist_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' %>
+
+          <%= check_box_tag "active", todo.id, todo.active,
+          data: { remote: true, url: url_for(action: :update, active:todo.active, id: todo.id), :remote => true, method: :patch } %>
+          <label for="active"></label>
+        </div>
+      </div>
+      <div class="timestamp">
+        <%= todo.created_at %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

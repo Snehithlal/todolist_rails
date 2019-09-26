@@ -1,0 +1,95 @@
+// Place all the styles related to the todolists controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+// table, th, td {
+//   border: 1px solid black;
+//   border-collapse: collapse;
+// }
+//
+.body {
+  background-color: #e4e4e4;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.login{
+  float: right;
+  margin: 10px 0;
+}
+
+.createtodo {
+  width: 100%;
+  border: 1px solid green;
+  margin: 10px 0;
+  padding: 5px;
+}
+.search{
+  width: 25%;
+  padding: 5px;
+  margin: 10px 0;
+}
+.todoform {
+  width: 100px;
+  border: 1px solid black;
+}
+.posttodo {
+  padding: 30px;
+  border: 1px solid gray;
+  margin: 40px 0;
+}
+
+#switches {
+  float: right;
+}
+.todobody {
+  float: left;
+}
+
+.timestamp {
+
+}
+
+.switch-field {
+	display: flex;
+	margin-bottom: 36px;
+	overflow: hidden;
+}
+
+.switch-field input {
+	position: absolute !important;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	width: 1px;
+	border: 0;
+	overflow: hidden;
+}
+
+.switch-field label {
+	background-color: #e4e4e4;
+	color: rgba(0, 0, 0, 0.6);
+	font-size: 14px;
+	line-height: 1;
+	text-align: center;
+	padding: 8px 16px;
+	margin-right: -1px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+	transition: all 0.1s ease-in-out;
+}
+.switch-field label:hover {
+	cursor: pointer;
+}
+
+.switch-field input:checked + label {
+	background-color: #a5dc86;
+	box-shadow: none;
+}
+
+.switch-field label:first-of-type {
+	border-radius: 4px 0 0 4px;
+}
+
+.switch-field label:last-of-type {
+	border-radius: 0 4px 4px 0;
+}
