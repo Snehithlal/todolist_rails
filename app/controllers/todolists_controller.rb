@@ -2,9 +2,11 @@ class TodolistsController < ApplicationController
 
   #class variable for storing active status
   @@active_status = 0
+
   def index
     @todolists = Todolist.all
     @list_todos = list_todos
+    @active_status = @@active_status
   end
 
   def new
@@ -46,9 +48,8 @@ class TodolistsController < ApplicationController
 
   #search for body in the list
   def search
-    p params
     search_pattern = "%#{search_params[:search]}%"
-     @list_todos=Todolist.search_body(search_pattern,@@active_status)
+    @list_todos=Todolist.search_body(search_pattern,@@active_status)
     render 'index'
 
   end
