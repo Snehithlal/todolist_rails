@@ -31,7 +31,7 @@
               <i class="fa fa-angle-down" style="font-size:36px"></i>
             </a>
             <%= link_to '<i class="fa fa-close" style="font-size:24px"></i>'.html_safe,
-             todolist_path(todo), method: :delete, data: { confirm: 'Are you sure?' },
+             todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' },
               :remote => true, :class => 'delete_todo' %>
 
             <%= check_box_tag "active", todo.id, todo.active,

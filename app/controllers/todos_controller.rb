@@ -1,20 +1,21 @@
-class TodolistsController < ApplicationController
+class TodosController < ApplicationController
 
   #class variable for storing active status
   @@active_status = 0
 
   def index
-    @todolists = Todolist.all
+    @todolists = Todo.all
     @list_todos = list_todos
     @active_status = @@active_status
   end
 
   def new
-    @todolist = Todolist.new
+    @todolist = Todo.new
   end
 
   def create
-    @todolist = Todolist.new(todolist_params)
+    p "dsjkfgvbbj"
+    @todolist = Todo.new(todo_params)
     if @todolist.save
       redirect_to root_path, notice: "created"
     else
@@ -26,11 +27,11 @@ class TodolistsController < ApplicationController
   def list_todos
     case @@active_status
     when 0
-      Todolist.active_todos
+      Todo.active_todos
     when 1
-      Todolist.inactive_todos
+      Todo.inactive_todos
     else
-      Todolist.sorted_todos
+      Todo.sorted_todos
     end
   end
 
@@ -49,14 +50,14 @@ class TodolistsController < ApplicationController
   #search for body in the list
   def search
     search_pattern = "%#{search_params[:search]}%"
-    @list_todos=Todolist.search_body(search_pattern,@@active_status)
+    @list_todos=Todo.search_body(search_pattern,@@active_status)
     render 'index'
 
   end
 
   #to change active status
   def update
-    @todolist = Todolist.find(params[:id])
+    @todolist = Todo.find(params[:id])
     params[:active] == "true" ? @todolist.update(active: false) : @todolist.update(active: true)
     @todolist.save
     redirect_to root_path
@@ -64,15 +65,15 @@ class TodolistsController < ApplicationController
 
   #destroy parameters
   def destroy
-    @todolist = Todolist.find(params[:id])
+    @todolist = Todo.find(params[:id])
     @todolist.destroy
     redirect_to root_path
   end
 
   private
 
-  def todolist_params
-    params.require(:todolist).permit(:body, :active).merge("user_id" => current_user.id)
+  def todo_params
+    params.require(:todo).permit(:body, :active).merge("user_id" => current_user.id)
   end
 
   def search_params
