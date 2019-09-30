@@ -5,7 +5,7 @@ class TodosController < ApplicationController
 
   def index
     @todolists = Todo.all
-    @list_todos = list_todos
+    @list_todos = list_todos.where(user_id: current_user.id)
     @active_status = @@active_status
   end
 
@@ -14,9 +14,9 @@ class TodosController < ApplicationController
   end
 
   def create
-    p "dsjkfgvbbj"
     @todolist = Todo.new(todo_params)
     if @todolist.save
+      Todo.update_position
       redirect_to root_path, notice: "created"
     else
       redirect_to root_path, notice: "failed"
@@ -60,6 +60,7 @@ class TodosController < ApplicationController
     @todolist = Todo.find(params[:id])
     params[:active] == "true" ? @todolist.update(active: false) : @todolist.update(active: true)
     @todolist.save
+    Todo.update_position
     redirect_to root_path
   end
 
@@ -67,7 +68,18 @@ class TodosController < ApplicationController
   def destroy
     @todolist = Todo.find(params[:id])
     @todolist.destroy
+    Todo.update_position
     redirect_to root_path
+  end
+
+  #position_up
+  def position_up
+    p "up"
+  end
+
+  #position_down
+  def position_down
+    p "down"
   end
 
   private

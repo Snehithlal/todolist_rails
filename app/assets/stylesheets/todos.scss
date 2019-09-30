@@ -6,13 +6,10 @@
 //   border-collapse: collapse;
 // }
 //
-.body {
-  background-color: #e4e4e4;
+body {
+  background-color: #e8e8e8;
 }
-// .container {
-//   max-width: 800px;
-//   margin: 0 auto;
-// }
+
 .login{
   float: right;
   margin: 10px 0;
@@ -28,34 +25,37 @@
   width: 25%;
   padding: 5px;
   margin: 10px 0;
+  background-color: #f4f4f4;
 }
 .todoform {
   width: 100px;
   border: 1px solid black;
 }
 .posttodo {
-  padding: 30px;
+  padding: 20px;
+  background-color: #f4f4f4;
   border: 1px solid gray;
   margin: 40px 0;
 }
 
-#switches {
+.postbody{
+  // font-weight: bold;
+}
+.postbuttons{
   float: right;
 }
-.todobody {
-  float: left;
-}
-
 .timestamp {
-
+  font-size: 10px;
+  color: #a7a7a7;
 }
+
+//ractive inactive radio button
 
 .switch-field {
 	display: flex;
 	margin-bottom: 36px;
 	overflow: hidden;
 }
-
 .switch-field input {
 	position: absolute !important;
 	clip: rect(0, 0, 0, 0);
@@ -66,7 +66,7 @@
 }
 
 .switch-field label {
-	background-color: #e4e4e4;
+	background-color: #e8e8e8;
 	color: rgba(0, 0, 0, 0.6);
 	font-size: 14px;
 	line-height: 1;
@@ -74,15 +74,15 @@
 	padding: 8px 16px;
 	margin-right: -1px;
 	border: 1px solid rgba(0, 0, 0, 0.2);
-	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
 	transition: all 0.1s ease-in-out;
 }
+
 .switch-field label:hover {
 	cursor: pointer;
 }
 
 .switch-field input:checked + label {
-	background-color: #ffffff;
+	background-color: #f4f4f4;
 	box-shadow: none;
 }
 
@@ -92,4 +92,49 @@
 
 .switch-field label:last-of-type {
 	border-radius: 0 4px 4px 0;
+}
+
+
+//rounded check_box_tag
+.round {
+  position: relative;
+}
+
+.round label {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 28px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 28px;
+}
+
+.round label:after {
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  content: "";
+  height: 6px;
+  left: 7px;
+  opacity: 0;
+  position: absolute;
+  top: 8px;
+  transform: rotate(-45deg);
+  width: 12px;
+}
+
+.round input[type="checkbox"] {
+  visibility: hidden;
+}
+
+.round input[type="checkbox"]:checked + label {
+  background-color: #66bb6a;
+  border-color: #66bb6a;
+}
+
+.round input[type="checkbox"]:checked + label:after {
+  opacity: 1;
 }

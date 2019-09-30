@@ -1,53 +1,48 @@
 <div class="container">
 
   <%= render 'form' %>
-  <!-- <div class="switch-field">
-    <input type="radio" id="radio-one" name="switch-one" value="active"
-     checked="checked"/>
-    <label for="radio-one">Active</label>
-    <input type="radio" id="radio-two" name="switch-one" value="inactive"/>
-    <label for="radio-two">Inactive</label>
-  </div> -->
-  <%= radio_button_tag 'active', 'active',
-  @active_status == 0 || @active_status == 2 ,
-  data: { remote: true, url: url_for(action: :checkactive), method: :post }
-   %>
-  <label for="active">Active</label>
-  <%= radio_button_tag 'active', 'inactive',
-  @active_status == 1,
-  data: { remote: true, url: url_for(action: :checkactive), method: :post }
-   %>
-  <label for="active">Inactive</label>
+  <div class="switch-field">
+  <%= radio_button_tag 'active', 'active', @active_status == 0 || @active_status == 2 , data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
+  <label for="active_active">Active</label>
+  <%= radio_button_tag 'active', 'inactive', @active_status == 1, data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
+  <label for="active_inactive">Inactive</label>
+  </div>
   <% if !@list_todos.empty? %>
     <% @list_todos.each do |todo| %>
-      <div class="posttodo">
-        <div class="names">
-          <div class="todobody"><%= todo.body %></div>
-          <div id="switches">
-            <a href="#">
-              <i class="fa fa-angle-up" style="font-size:36px"></i>
-            </a>
-            <a href="#">
-              <i class="fa fa-angle-down" style="font-size:36px"></i>
-            </a>
-            <%= link_to '<i class="fa fa-close" style="font-size:24px"></i>'.html_safe,
-             todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' },
-              :remote => true, :class => 'delete_todo' %>
 
-            <%= check_box_tag "active", todo.id, todo.active,
-            data: { remote: true, url: url_for(action: :update,
-               active:todo.active, id: todo.id), method: :patch } %>
-            <label for="active"></label>
+      <div class="posttodo">
+        <div class="row">
+          <div class="col-8 postbody"><%= todo.body %></div>
+          <div class="col-4 row align-items-end postbuttons">
+            <div class="col-1">
+              <%= link_to '<i class="fa fa-angle-up" style="font-size:36px"></i>'.html_safe,todos_position_up_path(id:todo.id), data: { remote: true, url: url_for(action: :position_up), method: :put }
+              %>
           </div>
+
+            <div class="col-1">
+              <%= link_to
+              '<i class="fa fa-angle-down" style="font-size:36px"></i>'.html_safe
+              %>
+            </div>
+
+            <div class="col-2"><%= link_to '<i class="fa fa-close" style="font-size:24px"></i>'.html_safe, todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' %> </div>
+
+            <div class="round col-1">
+            <%= check_box_tag todo.id, todo.id, todo.active, data: { remote: true, url: url_for(action: :update, active:todo.active, id: todo.id), method: :patch } %>
+            <label for="<%=todo.id%>"></label></div>
+          </div>
+
         </div>
-        <div class="timestamp">
-          <%= todo.created_at %>
+        <div class="row ">
+          <div class="col timestamp"><%= todo.created_at %></div>
         </div>
       </div>
     <% end %>
   <% else %>
     <div class="posttodo">
-      <div class="todobody"> Nothing </div>
+      <div class="todobody">
+        Nothing
+      </div>
     </div>
   <% end %>
 </div>
