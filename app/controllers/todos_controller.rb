@@ -87,7 +87,7 @@ class TodosController < ApplicationController
 
   end
 
-  #position_up
+  #position_up swap priority values
   def position_up(current_todo,array_todo)
       current_index = array_todo.find_index(current_todo)
       previous_todo = array_todo[current_index-1]
