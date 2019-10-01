@@ -12,29 +12,33 @@
 
       <div class="posttodo">
         <div class="row">
-          <div class="col-8 postbody"><%= todo.body %></div>
-          <div class="col-4 row align-items-end postbuttons">
-            <div class="col-1">
-              <%= link_to '<i class="fa fa-angle-up" style="font-size:36px"></i>'.html_safe,todos_position_up_path(id:todo.id), data: { remote: true, url: url_for(action: :position_up), method: :put }
+          <div class="col-6 postbody"><%= link_to todo.body, todo %></div>
+          <div class="col-2"></div>
+          <div class="col-4 row postbuttons">
+            <div class="col-2">
+              <% unless @list_todos.first == todo %>
+              <%= link_to '<i class="material-icons arrows">keyboard_arrow_up</i>'.html_safe,todos_change_position_path(id:todo.id, arrow:"up"), data: { remote: true, url: url_for(action: :change_position), method: :post }
               %>
+              <% end %>
           </div>
 
-            <div class="col-1">
-              <%= link_to
-              '<i class="fa fa-angle-down" style="font-size:36px"></i>'.html_safe
+            <div class="col-2">
+              <% unless @list_todos.last == todo %>
+              <%= link_to '<i class="material-icons arrows">keyboard_arrow_down</i>'.html_safe,todos_change_position_path(id:todo.id, arrow:"down"), data: { remote: true, url: url_for(action: :change_position), method: :post }
               %>
+              <% end %>
             </div>
 
-            <div class="col-2"><%= link_to '<i class="fa fa-close" style="font-size:24px"></i>'.html_safe, todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' %> </div>
+            <div class="col-3"><%= link_to '<i class="material-icons arrows">clear</i>'.html_safe, todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' %> </div>
 
-            <div class="round col-1">
+            <div class="round col-2 arrows">
             <%= check_box_tag todo.id, todo.id, todo.active, data: { remote: true, url: url_for(action: :update, active:todo.active, id: todo.id), method: :patch } %>
             <label for="<%=todo.id%>"></label></div>
           </div>
 
         </div>
         <div class="row ">
-          <div class="col timestamp"><%= todo.created_at %></div>
+          <div class="col timestamp"><%= todo.created_at.strftime('%l.%M %P, %-d %B %Y') %></div>
         </div>
       </div>
     <% end %>

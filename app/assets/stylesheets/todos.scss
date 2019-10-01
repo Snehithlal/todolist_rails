@@ -9,10 +9,16 @@
 body {
   background-color: #e8e8e8;
 }
-
+.postbody a{
+  color: black;
+}
 .login{
   float: right;
-  margin: 10px 0;
+  margin: 20px 15px;
+}
+.login a{
+  color: gray;
+  font-weight: bold;
 }
 
 .createtodo {
@@ -37,7 +43,17 @@ body {
   border: 1px solid gray;
   margin: 40px 0;
 }
-
+.arrows{
+  color: gray;
+  font-size: 24px;
+}
+// .uparrow{
+//   font-size: 42px;
+//   color: gray;
+// }
+// .downarrow{
+//   font-size: 16px;
+// }
 .postbody{
   // font-weight: bold;
 }

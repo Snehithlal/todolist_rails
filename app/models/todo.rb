@@ -4,17 +4,17 @@ class Todo < ApplicationRecord
 
   #sort active todos
   def self.active_todos
-    Todo.where(active: true).order(id: :desc)
+    Todo.where(active: true).order(priority: :desc)
   end
 
   #sort inactive todos
   def self.inactive_todos
-    Todo.where(active: false).order(id: :desc)
+    Todo.where(active: false).order(priority: :desc)
   end
 
   #sort todo based on id for listing newest first
   def self.sorted_todos
-    Todo.all.order(id: :desc)
+    Todo.all.order(priority: :desc)
   end
 
   #search for keywords

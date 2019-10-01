@@ -50,7 +50,7 @@ class TodosController < ApplicationController
   #search for body in the list
   def search
     search_pattern = "%#{search_params[:search]}%"
-    @list_todos=Todo.search_body(search_pattern,@@active_status)
+    @list_todos = Todo.search_body(search_pattern,@@active_status).where(user_id: current_user.id)
     render 'index'
 
   end
@@ -72,14 +72,41 @@ class TodosController < ApplicationController
     redirect_to root_path
   end
 
+  #to change prority
+  def change_position
+    current_todo = Todo.find(params[:id])
+    array_todo = Todo.active_todos.to_a
+    array_todo = Todo.inactive_todos.to_a if !current_todo.active?
+    case params[:arrow]
+    when "up"
+      position_up(current_todo,array_todo)
+    when "down"
+      position_down(current_todo,array_todo)
+    end
+
+
+  end
+
   #position_up
-  def position_up
-    p "up"
+  def position_up(current_todo,array_todo)
+      current_index = array_todo.find_index(current_todo)
+      previous_todo = array_todo[current_index-1]
+      previous = previous_todo[:priority]
+      current = current_todo[:priority]
+      current_todo.update(priority: previous)
+      previous_todo.update(priority: current)
+      redirect_to root_path
   end
 
   #position_down
-  def position_down
-    p "down"
+  def position_down(current_todo,array_todo)
+      current_index = array_todo.find_index(current_todo)
+      next_todo = array_todo[current_index + 1]
+      next_priority = next_todo[:priority]
+      current_priority = current_todo[:priority]
+      current_todo.update(priority: next_priority)
+      next_todo.update(priority: current_priority)
+      redirect_to root_path
   end
 
   private
