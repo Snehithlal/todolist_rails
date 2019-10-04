@@ -1,55 +1,39 @@
 <div class="container">
 
-  <%= render 'form' %>
+
+  <%= text_field_tag :create , "", placeholder: "enter yor todo", class: "createtodo"%>
   <div class="switch-field">
-  <%= radio_button_tag 'active', 'active', @active_status == 0 || @active_status == 2 , data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
+  <%= radio_button_tag 'active', 'active', true , data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
   <label for="active_active">Active</label>
-  <%= radio_button_tag 'active', 'inactive', @active_status == 1, data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
+  <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
   <label for="active_inactive">Inactive</label>
   </div>
-  <% if !@list_todos.empty? %>
-    <% @list_todos.each do |todo| %>
+  <div class="todolist">
+    <%= render 'todolist' %>
+  </div>
 
-      <div class="card posttodo">
-        <div class="row">
-          <div class="col-7"><%= link_to todo.body, todo %>
-            <div class="row card-link">
-              <div class="col card-link timestamp"><%= todo.created_at.strftime('%l.%M %P, %-d %B %Y') %></div>
-            </div>
-
-          </div>
-          <!-- <div class=""></div> -->
-          <div class="col-5 card-group ">
-            <div class="">
-              <% unless @list_todos.first == todo %>
-              <%= link_to '<i class="material-icons arrows">keyboard_arrow_up</i>'.html_safe,todos_change_position_path(id:todo.id, arrow:"up"), data: { remote: true, url: url_for(action: :change_position), method: :post }
-              %>
-              <% end %>
-          </div>
-
-            <div class="">
-              <% unless @list_todos.last == todo %>
-              <%= link_to '<i class="material-icons arrows">keyboard_arrow_down</i>'.html_safe,todos_change_position_path(id:todo.id, arrow:"down"), data: { remote: true, url: url_for(action: :change_position), method: :post }
-              %>
-              <% end %>
-            </div>
-
-            <div class=""><%= link_to '<i class="material-icons arrows">clear</i>'.html_safe, todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' %> </div>
-
-            <div class="round ">
-              <%= check_box_tag todo.id, todo.id, todo.active, data: { remote: true, url: url_for(action: :update, active:todo.active, id: todo.id), method: :patch } %>
-              <label for="<%=todo.id%>"></label></div>
-            </div>
-
-        </div>
-
-      </div>
-    <% end %>
-  <% else %>
-    <div class="posttodo">
-      <div class="todobody">
-        Nothing
-      </div>
-    </div>
-  <% end %>
 </div>
+
+
+
+<script>
+  checked_value1 = <%= @active_status == 0 || @active_status == 2%>;
+  checked_value2 = <%= @active_status == 1 %>;
+  $('#active_active').prop('checked',checked_value1)
+  $('#active_inactive').prop('checked',checked_value2)
+  $('.up').first().addClass( "invisible" );
+  $('.down').last().addClass( "invisible" );
+
+  $(".create").keydown(function() {
+    if event.which == 13{
+      alert ("1");
+    $.ajax({
+       url: '/todos',
+       data: {create: $(this).val()},
+       type: 'POST'
+    });
+  }
+});
+
+
+</script>

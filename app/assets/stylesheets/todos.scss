@@ -12,14 +12,7 @@ body {
 .postbody a{
   color: black;
 }
-.login{
-  float: right;
-  margin: 20px 15px;
-}
-.login a{
-  color: gray;
-  font-weight: bold;
-}
+
 
 .createtodo {
   width: 100%;
@@ -27,11 +20,9 @@ body {
   margin: 10px 0;
   padding: 5px;
 }
-.search{
-  width: 25%;
-  padding: 5px;
-  margin: 10px 0;
-  background-color: #f4f4f4;
+
+.card-text a{
+  color: gray
 }
 .todoform {
   width: 100px;
@@ -46,6 +37,15 @@ body {
 .arrows{
   color: gray;
   font-size: 24px;
+}
+.check{
+  color: green;
+}
+.check:hover{
+  color: gray;
+}
+.inactive{
+  color: gray;
 }
 // .uparrow{
 //   font-size: 42px;
