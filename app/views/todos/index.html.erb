@@ -1,7 +1,7 @@
-<div class="container">
-
-
-  <%= text_field_tag :create , "", placeholder: "enter yor todo", class: "createtodo"%>
+<div class="search-box">
+<%= text_field_tag :search , "", placeholder: "search", class: "search"%>
+</div>
+  <%= render 'form' %>
   <div class="switch-field">
   <%= radio_button_tag 'active', 'active', true , data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
   <label for="active_active">Active</label>
@@ -12,7 +12,7 @@
     <%= render 'todolist' %>
   </div>
 
-</div>
+
 
 
 
@@ -21,19 +21,12 @@
   checked_value2 = <%= @active_status == 1 %>;
   $('#active_active').prop('checked',checked_value1)
   $('#active_inactive').prop('checked',checked_value2)
-  $('.up').first().addClass( "invisible" );
-  $('.down').last().addClass( "invisible" );
 
-  $(".create").keydown(function() {
-    if event.which == 13{
-      alert ("1");
+  $("#search").keyup(function() {
     $.ajax({
-       url: '/todos',
-       data: {create: $(this).val()},
-       type: 'POST'
+       url: '/todos/search',
+       data: {search: $(this).val()}
     });
-  }
 });
-
 
 </script>

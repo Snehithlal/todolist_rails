@@ -1,11 +1,13 @@
 class TodosController < ApplicationController
 
+  respond_to :js
+
   #class variable for storing active status
   @@active_status = 0
 
   def index
     @todolists = Todo.all
-    @list_todos = list_todos.where(user_id: current_user.id)
+    @list_todos = print_todos
     @active_status = @@active_status
   end
 
@@ -13,16 +15,20 @@ class TodosController < ApplicationController
     @todolist = Todo.new
   end
 
+  #calling from each method
+  def print_todos
+    @list_todos = list_todos.where(user_id: current_user.id)
+  end
+
   def create
-    p params
-    # @todolist = Todo.new(todo_params)
-    # current_priority = Todo.search_index
-    # @todolist.update(priority: current_priority+1)
-    # if @todolist.save
-    #   redirect_to root_path, notice: "created"
-    # else
-    #   redirect_to root_path, notice: "failed"
-    # end
+    @todolist = Todo.new(todo_params)
+    current_priority = Todo.search_index
+    @todolist.update(priority: current_priority+1)
+    if @todolist.save
+      redirect_to root_path, notice: "created"
+    else
+      redirect_to root_path, notice: "failed"
+    end
   end
 
   #check condition
@@ -53,7 +59,6 @@ class TodosController < ApplicationController
   def search
     search_pattern = "%#{params[:search]}%"
     @list_todos = Todo.search_body(search_pattern,@@active_status).where(user_id: current_user.id)
-    respond_to :js
 
   end
 
@@ -63,19 +68,16 @@ class TodosController < ApplicationController
     @todolist.active? ? @todolist.update(active: false) : @todolist.update(active: true)
     @todolist.save
     Todo.update_position
-    redirect_to root_path
+    print_todos
   end
+
 
   #destroy parameters
   def destroy
     @todolist = Todo.find(params[:id])
     @todolist.destroy
     Todo.update_position
-    # respond_to do |format|
-    #   format.html { redirect_to root_path }
-    #   format.js { }
-    # end
-    redirect_to root_path
+    print_todos
   end
 
   #to change prority
@@ -85,21 +87,24 @@ class TodosController < ApplicationController
     array_todo = Todo.inactive_todos.to_a if !current_todo.active?
     case params[:arrow]
     when "up"
-      # p "------------------------"
-      # current_priority = Todo.active_todos.where(id: params[:id])[0].priority
-      # # next_priority = Todo.active_todos.where(id: params[:id])[0].priority
-      # p "nextttt"
-      # p maxi = Todo.active_todos
-      # p "----------------------"
+    #   p "------------------------"
+    # p  current_priority = Todo.active_todos.where(id: params[:id])
+    #   # next_priority = Todo.active_todos.index(current_priority.id)
+    #   # p current_priority[0][:priority].class
+    # p  current_priority[0].id
+    #   p current_position = Todo.active_todos.index(current_priority[0].id)
+    #   # p next_priority
+    #   # maxi = Todo.active_todos
+    #   p "----------------------"
       position_up(current_todo,array_todo)
     when "down"
       position_down(current_todo,array_todo)
     end
-
-
+    print_todos
+    # redirect_to root_path
   end
 
-  #position_up swap priority values
+  #position_up
   def position_up(current_todo,array_todo)
       current_index = array_todo.find_index(current_todo)
       previous_todo = array_todo[current_index-1]
@@ -107,7 +112,6 @@ class TodosController < ApplicationController
       current = current_todo[:priority]
       current_todo.update(priority: previous)
       previous_todo.update(priority: current)
-      redirect_to root_path
   end
 
   #position_down
@@ -118,7 +122,6 @@ class TodosController < ApplicationController
       current_priority = current_todo[:priority]
       current_todo.update(priority: next_priority)
       next_todo.update(priority: current_priority)
-      redirect_to root_path
   end
 
   private
@@ -127,8 +130,8 @@ class TodosController < ApplicationController
     params.require(:todo).permit(:body, :active).merge("user_id" => current_user.id)
   end
 
-  def search_params
-     params.require(:search_data).permit(:search)
-  end
+  # def search_params
+  #    params.require(:search_data).permit(:search)
+  # end
 
 end

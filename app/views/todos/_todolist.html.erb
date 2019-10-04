@@ -3,59 +3,64 @@
 
     <div class="card posttodo">
       <div class="row">
-        <div class="col-6 card-text"><%= link_to todo.body, todo %>
-          <div class="row card-link">
-            <div class="col card-link text-muted"><%= todo.created_at.strftime('%l.%M %P, %-d %B %Y') %></div>
+        <div class="col-8">
+          <div class="card-text">
+            <%= link_to todo.body, todo %>
+          </div>
+          <div class="row card-link ">
+            <div class="col card-link text-muted timestamp"><%= todo.created_at.strftime('%l.%M %P, %-d %B %Y') %></div>
           </div>
 
         </div>
-        <!-- <div class=""></div> -->
-        <div class="col-6 d-flex align-items-center border-0">
+
+        <div class="col-4 d-flex align-items-center border-0">
           <ul class="list-group list-group-horizontal-lg border-0">
-          <!-- <div class=""> -->
-          <li class="list-group-item flex-fill border-0 up">
+            <li class="list-group-items flex-fill border-0 up">
 
-            <%= link_to todos_change_position_path(id:todo.id, arrow:"up"), data: { remote: true, url: url_for(action: :change_position), method: :post } do %>
-            <i class="material-icons arrows">keyboard_arrow_up</i><%end%>
+              <%= link_to todos_change_position_path(id:todo.id, arrow:"up"), data: { remote: true, url: url_for(action: :change_position), method: :post } do %>
+              <i class="material-icons arrows">keyboard_arrow_up</i>
+            <%end%>
 
-            </li>
-        <!-- </div> -->
+          </li>
 
-          <!-- <div class=""> -->
-          <li class="list-group-item flex-fill border-0 down">
+          <li class="list-group-items sflex-fill border-0 down">
 
             <%= link_to todos_change_position_path(id:todo.id, arrow:"down"), data: { remote: true, url: url_for(action: :change_position), method: :post } do %>
             <i class="material-icons arrows">keyboard_arrow_down</i>
-            <% end %>
+          <% end %>
 
-          <!-- </div> -->
-          </li>
+        </li>
 
-          <!-- <div class=""> -->
-          <li class="list-group-item flex-fill border-0">
-            <%= link_to todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' do %>
-            <i class="material-icons arrows">clear</i><%end%>
-          <!-- </div> -->
-          </li>
+        <li class="list-group-items flex-fill border-0">
+          <%= link_to todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' do %>
+          <i class="material-icons arrows">clear</i>
+        <%end%>
 
-          <!-- <div class="round "> -->
-          <li class="list-group-item flex-fill border-0">
-            <%= link_to todos_status_update_path(id:todo.id), data: { remote: true, url: url_for(action: :status_update), method: :post }  do %>
-            <i class="material-icons <%=todo.active? ? "check" : "inactive"%>">check_circle</i><%end%>
-          </li>
+      </li>
 
-          <!-- </div> -->
-          </ul>
-          </div>
+      <li class="list-group-items flex-fill border-0">
+        <%= link_to todos_status_update_path(id:todo.id), data: { remote: true, url: url_for(action: :status_update), method: :post } do %>
+        <i class=" img-check material-icons <%=todo.active? ? "check" : "inactive"%>">check_circle</i>
+      <%end%>
+    </li>
 
-      </div>
+  </ul>
+</div>
 
-    </div>
-  <% end %>
-<% else %>
-  <div class="card posttodo">
-    <div class="card-text">
-      Nothing
-    </div>
-  </div>
+</div>
+
+</div>
 <% end %>
+<% else %>
+<div class="card posttodo">
+<div class="card-text">
+Nothing
+</div>
+</div>
+<% end %>
+
+<script>
+
+$('.up').first().addClass("invisible");
+$('.down').last().addClass("invisible");
+</script>

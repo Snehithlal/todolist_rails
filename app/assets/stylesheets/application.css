@@ -26,13 +26,17 @@
   color: gray;
 }
 .links{
-  margin: 0px;
+  /* margin: 0px; */
+}
+.linkitems{
+  padding: 0 30px;
 }
 
-.search{
-  width: 50%;
-  padding: 5px;
-  color: gray;
-  background: transparent;
-  border: 1px solid gray;
+
+
+.ok{
+  text-align: center;
+}
+.ok img{
+  width: 150px;
 }
