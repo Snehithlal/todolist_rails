@@ -35,4 +35,9 @@ class Todo < ApplicationRecord
       todo.update_column :priority, index
     end
   end
+
+  #search for index
+  def self.search_index
+    return Todo.order(:priority).last.priority
+  end
 end

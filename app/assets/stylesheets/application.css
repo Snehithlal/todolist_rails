@@ -13,7 +13,26 @@
  *= require_tree .
  *= require_self
  */
-/* .container{
-  max-width: 800px;
+.container{
+  max-width: 700px;
   margin: 0 auto;
-} */
+}
+
+.login{
+  margin: 0px;
+  padding: 20px 0;
+}
+.login a{
+  color: gray;
+}
+.links{
+  margin: 0px;
+}
+
+.search{
+  width: 50%;
+  padding: 5px;
+  color: gray;
+  background: transparent;
+  border: 1px solid gray;
+}
