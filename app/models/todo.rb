@@ -1,5 +1,6 @@
 class Todo < ApplicationRecord
   has_many :user
+  has_many :comments, dependent: :destroy  
   validates_presence_of :body
 
   #sort active todos

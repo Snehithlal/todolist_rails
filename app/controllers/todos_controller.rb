@@ -69,6 +69,9 @@ class TodosController < ApplicationController
     @todolist.save
     Todo.update_position
     print_todos
+    # render :update do |page|
+    #   page.replace_html  'todolist', :partial => 'todolist', :collection => @list_todos
+    # end
   end
 
 
@@ -80,6 +83,12 @@ class TodosController < ApplicationController
     print_todos
   end
 
+  #show todo link and comments
+  def show
+    @todo_details = Todo.find(params[:id])
+    @comments = @todo_details.comments
+  end
+
   #to change prority
   def change_position
     current_todo = Todo.find(params[:id])
@@ -87,15 +96,6 @@ class TodosController < ApplicationController
     array_todo = Todo.inactive_todos.to_a if !current_todo.active?
     case params[:arrow]
     when "up"
-    #   p "------------------------"
-    # p  current_priority = Todo.active_todos.where(id: params[:id])
-    #   # next_priority = Todo.active_todos.index(current_priority.id)
-    #   # p current_priority[0][:priority].class
-    # p  current_priority[0].id
-    #   p current_position = Todo.active_todos.index(current_priority[0].id)
-    #   # p next_priority
-    #   # maxi = Todo.active_todos
-    #   p "----------------------"
       position_up(current_todo,array_todo)
     when "down"
       position_down(current_todo,array_todo)
@@ -130,8 +130,5 @@ class TodosController < ApplicationController
     params.require(:todo).permit(:body, :active).merge("user_id" => current_user.id)
   end
 
-  # def search_params
-  #    params.require(:search_data).permit(:search)
-  # end
 
 end

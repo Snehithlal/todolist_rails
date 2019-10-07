@@ -1,0 +1,45 @@
+<div class="back"><%= link_to "<back to home", root_path %></div>
+
+  <div class="todo-details">
+    <div class="row">
+      <div class="col-11">
+        <%= @todo_details.body %>
+      </div>
+      <div class="col-1 flex-fill border-0">
+        <%= link_to todo_path(@todo_details), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' do %>
+          <i class="material-icons arrows">clear</i>
+        <%end%>
+      </div>
+    </div>
+    <div class="text-muted">
+      <%= @todo_details.created_at.strftime('%l.%M %P, %-d %B %Y') %>
+    </div>
+      <div class="task-complete">
+        <p>Task Completion</p>
+      </div>
+      <div class="row">
+        <div class="progress col-11">
+          <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+        </div>
+        <div class="flex-fill border-0 col-1">
+          <%= link_to todos_status_update_path(id:@todo_details.id), data: { remote: true, url: url_for(action: :status_update), method: :post } do %>
+          <i class=" img-check material-icons <%=@todo_details.active? ? "check" : "inactive"%>">check_circle</i>
+          <%end%>
+        </div>
+      </div>
+
+    <div class="share">
+      <p><span class="sharedwith">Shared with:</span>snehith,ferbin,shreyas</p>
+    </div>
+
+    <div><button type="button" class="btn btn-outline-secondary"><p>Share this</p></button></div>
+
+  </div>
+
+  <div class="comment-list">
+    <%= render '/comments/comments' %>
+  </div>
+
+  <div class="comment-box">
+    <%= render '/comments/form' %>
+  </div>
