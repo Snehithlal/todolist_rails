@@ -1,1 +1,15 @@
-$(".todolist").html("<%= escape_javascript render(:partial => 'todolist', :locals => { :list_todos => @list_todos }) %>");
+var current_div = $("#<%=@todo.id%>");
+if ("<%=@arrow%>" == "down"){
+  var next_div = $("#<%=@todo.id%>").next();
+  var current_todo = current_div.clone();
+  var next_todo = next_div.clone();
+  current_div.replaceWith(next_todo);
+  next_div.replaceWith(current_todo);
+}else{
+  var prev_div = $("#<%=@todo.id%>").prev();
+  var current_todo = current_div.clone();
+  var prev_todo = prev_div.clone();
+  current_div.replaceWith(prev_todo);
+  prev_div.replaceWith(current_todo);
+}
+reset_arrow();

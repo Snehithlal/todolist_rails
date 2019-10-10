@@ -1,11 +1,11 @@
 <div class="search-box">
-<%= text_field_tag :search , "", placeholder: "search", class: "search"%>
+<%= text_field_tag :search , "", placeholder: "search",autofocus: true, class: "search"%>
 </div>
   <%= render 'form' %>
   <div class="switch-field">
-  <%= radio_button_tag 'active', 'active', true , data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
+  <%= radio_button_tag 'active', 'active', true , data: { remote: true, method: :get } %>
   <label for="active_active">Active</label>
-  <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, url: url_for(action: :checkactive), method: :post } %>
+  <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, method: :get } %>
   <label for="active_inactive">Inactive</label>
   </div>
   <div class="todolist">
@@ -13,21 +13,19 @@
   </div>
 
 
-
-
-
-
 <script>
-  checked_value1 = <%= @active_status == 0 || @active_status == 2%>;
-  checked_value2 = <%= @active_status == 1 %>;
-  $('#active_active').prop('checked',checked_value1)
-  $('#active_inactive').prop('checked',checked_value2)
-
   $("#search").keyup(function() {
     $.ajax({
        url: '/todos/search',
        data: {search: $(this).val()}
     });
 });
+function reset_arrow(){
+$('.up').removeClass("invisible");
+$('.down').removeClass("invisible");
+$('.up').first().addClass("invisible");
+$('.down').last().addClass("invisible");
+}
+reset_arrow();
 
 </script>

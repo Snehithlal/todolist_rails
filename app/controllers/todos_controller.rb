@@ -1,86 +1,69 @@
 class TodosController < ApplicationController
-
   respond_to :js
-
-  #class variable for storing active status
-  @@active_status = 0
+  respond_to :html
 
   def index
     @todolists = Todo.all
-    @list_todos = print_todos
-    @active_status = @@active_status
+    @list_todos = check_params(params) 
   end
 
   def new
     @todolist = Todo.new
   end
 
-  #calling from each method
-  def print_todos
-    @list_todos = list_todos.where(user_id: current_user.id)
+  #check parameters
+  def check_params(params)
+    if params.key?(:search)
+      search
+      # @list_todos = Todo.search("%#{params[:search]}%").user(current_user)
+    elsif params.key?(:active)
+      @list_todos = params[:active] =="inactive" ? Todo.inactive_todos :  Todo.active_todos
+      @list_todos = @list_todos.user(current_user)
+    else
+      @list_todos = print_todos(true)
+    end
   end
 
+  #calling from each method
+  def print_todos(status)
+    @list_todos = status == true ? Todo.active_todos :  Todo.inactive_todos
+    @list_todos = @list_todos.user(current_user)
+  end
+
+  #create todo and update priority
   def create
     @todolist = Todo.new(todo_params)
     current_priority = Todo.search_index
     @todolist.update(priority: current_priority+1)
     if @todolist.save
-      redirect_to root_path, notice: "created"
+      print_todos(true)
     else
-      redirect_to root_path, notice: "failed"
+      print_todos(true)
     end
-  end
-
-  #check condition
-  def list_todos
-    case @@active_status
-    when 0
-      Todo.active_todos
-    when 1
-      Todo.inactive_todos
-    else
-      Todo.sorted_todos
-    end
-  end
-
-  #check radio button status
-  def checkactive
-     if params[:active] == "active"
-       @@active_status = 0
-     elsif params[:active] == "inactive"
-       @@active_status = 1
-     else
-       @@active_status = 2
-     end
-     redirect_to root_path
   end
 
   #search for body in the list
   def search
-    search_pattern = "%#{params[:search]}%"
-    @list_todos = Todo.search_body(search_pattern,@@active_status).where(user_id: current_user.id)
-
+    @list_todos = Todo.search("%#{params[:search]}%").user(current_user)
   end
 
   #to change active status by checking db value
   def status_update
     @todolist = Todo.find(params[:id])
+    status = @todolist.active
     @todolist.active? ? @todolist.update(active: false) : @todolist.update(active: true)
     @todolist.save
-    Todo.update_position
-    print_todos
-    # render :update do |page|
-    #   page.replace_html  'todolist', :partial => 'todolist', :collection => @list_todos
-    # end
+    # Todo.update_position
+    print_todos(status)
   end
 
 
   #destroy parameters
   def destroy
     @todolist = Todo.find(params[:id])
+    status = @todolist.active
     @todolist.destroy
-    Todo.update_position
-    print_todos
+    print_todos(status)
   end
 
   #show todo link and comments
@@ -91,37 +74,18 @@ class TodosController < ApplicationController
 
   #to change prority
   def change_position
-    current_todo = Todo.find(params[:id])
-    array_todo = Todo.active_todos.to_a
-    array_todo = Todo.inactive_todos.to_a if !current_todo.active?
+    @todo = Todo.find(params[:id])
+    current_todo = @todo
+    status = current_todo.active
+    array_todo = current_todo.active? ? Todo.active_todos.to_a : Todo.inactive_todos.to_a
     case params[:arrow]
     when "up"
-      position_up(current_todo,array_todo)
+      @arrow = "up"
+      Todo.position_up(current_todo,array_todo)
     when "down"
-      position_down(current_todo,array_todo)
+      @arrow = "down"
+      Todo.position_down(current_todo,array_todo)
     end
-    print_todos
-    # redirect_to root_path
-  end
-
-  #position_up
-  def position_up(current_todo,array_todo)
-      current_index = array_todo.find_index(current_todo)
-      previous_todo = array_todo[current_index-1]
-      previous = previous_todo[:priority]
-      current = current_todo[:priority]
-      current_todo.update(priority: previous)
-      previous_todo.update(priority: current)
-  end
-
-  #position_down
-  def position_down(current_todo,array_todo)
-      current_index = array_todo.find_index(current_todo)
-      next_todo = array_todo[current_index + 1]
-      next_priority = next_todo[:priority]
-      current_priority = current_todo[:priority]
-      current_todo.update(priority: next_priority)
-      next_todo.update(priority: current_priority)
   end
 
   private
