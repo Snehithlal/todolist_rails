@@ -1,1 +1,3 @@
-$(".todolist").html("<%= escape_javascript render(:partial => 'todolist', :locals => { :list_todos => @list_todos }) %>");
+$(".todolist").prepend("<%= escape_javascript render(:partial => 'todo', :locals => { :todolist => @todolist }) %>");
+reset_arrow();
+  

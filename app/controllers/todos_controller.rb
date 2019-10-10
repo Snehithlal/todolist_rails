@@ -4,7 +4,7 @@ class TodosController < ApplicationController
 
   def index
     @todolists = Todo.all
-    @list_todos = check_params(params) 
+    @list_todos = check_params(params)
   end
 
   def new
@@ -24,12 +24,6 @@ class TodosController < ApplicationController
     end
   end
 
-  #calling from each method
-  def print_todos(status)
-    @list_todos = status == true ? Todo.active_todos :  Todo.inactive_todos
-    @list_todos = @list_todos.user(current_user)
-  end
-
   #create todo and update priority
   def create
     @todolist = Todo.new(todo_params)
@@ -40,6 +34,12 @@ class TodosController < ApplicationController
     else
       print_todos(true)
     end
+  end
+
+  #calling from each method
+  def print_todos(status)
+    @list_todos = status == true ? Todo.active_todos :  Todo.inactive_todos
+    @list_todos = @list_todos.user(current_user)
   end
 
   #search for body in the list
@@ -53,7 +53,7 @@ class TodosController < ApplicationController
     status = @todolist.active
     @todolist.active? ? @todolist.update(active: false) : @todolist.update(active: true)
     @todolist.save
-    # Todo.update_position
+    Todo.update_position
     print_todos(status)
   end
 

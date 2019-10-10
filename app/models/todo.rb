@@ -1,9 +1,7 @@
 class Todo < ApplicationRecord
   has_many :user
-  after_destroy :update_position
   has_many :comments, dependent: :destroy
   validates_presence_of :body
-
 
   scope :active_todos, -> { where(:active => true).order(priority: :desc) }
   scope :inactive_todos, -> { where(:active => false).order(priority: :desc) }

@@ -1,4 +1,4 @@
 
-<%= form_with scope: :todo,url:todos_path, remote: true do |form| %>
+<%= form_with scope: :todo,url:todos_path,id: "newtodo", remote: true do |form| %>
   <%= form.text_field :body , placeholder: "enter your todo", class: "createtodo"%>
 <% end %>
