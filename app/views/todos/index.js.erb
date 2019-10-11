@@ -1,2 +1,12 @@
-$(".todolist").html("<%= escape_javascript render(:partial => 'todolist', :locals => { :list_todos => @list_todos }) %>");
+$(".todolist").html(  `<% if !@list_todos.empty? %>
+    <% @list_todos.each do |todo| %>
+  <%= render 'todolist', todo: todo %>
+  <% end %>
+  <% else %>
+  <div class="card posttodo">
+  <div class="card-text">
+  Nothing
+  </div>
+  </div>
+  <% end %>`);
 reset_arrow();

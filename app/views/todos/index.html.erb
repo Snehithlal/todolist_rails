@@ -9,7 +9,18 @@
   <label for="active_inactive">Inactive</label>
   </div>
   <div class="todolist">
-    <%= render 'todolist' %>
+    <% if !@list_todos.empty? %>
+      <% @list_todos.each do |todo| %>
+    <%= render 'todolist', todo: todo %>
+    <% end %>
+    <% else %>
+    <div class="card posttodo">
+    <div class="card-text">
+    Nothing
+    </div>
+    </div>
+    <% end %>
+
   </div>
 
 
@@ -21,16 +32,12 @@
     });
 });
 function reset_arrow(){
-$('.up').removeClass("invisible");
-$('.down').removeClass("invisible");
-$('.up').first().addClass("invisible");
-$('.down').last().addClass("invisible");
+  $('.up').removeClass("invisible");
+  $('.down').removeClass("invisible");
+  $('.up').first().addClass("invisible");
+  $('.down').last().addClass("invisible");
 }
-$('#newtodo').submit(function(){
-  var val = this;
-  console.log(val);
-    // $(this).val('');
-});
+
 reset_arrow();
 
 </script>

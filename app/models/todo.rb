@@ -7,6 +7,7 @@ class Todo < ApplicationRecord
   scope :inactive_todos, -> { where(:active => false).order(priority: :desc) }
   scope :search, lambda { |keyword| where("body LIKE ?", keyword).order(id: :desc) }
   scope :user, lambda { |keyword| where(user_id: keyword.id) }
+  # scope :active_todos, lambda { |keyword| where(:active => true).order(priority: :desc) .where(user_id: keyword.id) }
 
   #sort todo based on id for listing newest first
   def self.sorted_todos

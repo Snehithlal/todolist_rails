@@ -34,6 +34,7 @@ class TodosController < ApplicationController
     else
       print_todos(true)
     end
+    @count = Todo.active_todos.user(current_user)
   end
 
   #calling from each method
@@ -44,7 +45,11 @@ class TodosController < ApplicationController
 
   #search for body in the list
   def search
-    @list_todos = Todo.search("%#{params[:search]}%").user(current_user)
+    if params[:search] == ""
+      @list_todos = print_todos(true)
+    else
+      @list_todos = Todo.search("%#{params[:search]}%").user(current_user)
+    end
   end
 
   #to change active status by checking db value

@@ -1,7 +1,4 @@
 
-<% if !@list_todos.empty? %>
-  <% @list_todos.each do |todo| %>
-
     <div id="<%=todo.id%>" class="card posttodo" >
       <div class="row">
         <div class="col-8">
@@ -51,11 +48,3 @@
 </div>
 
 </div>
-<% end %>
-<% else %>
-<div class="card posttodo">
-<div class="card-text">
-Nothing
-</div>
-</div>
-<% end %>

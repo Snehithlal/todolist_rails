@@ -1,3 +1,8 @@
-$(".todolist").prepend("<%= escape_javascript render(:partial => 'todo', :locals => { :todolist => @todolist }) %>");
+if('<%=@count.count%>'== 1){
+  $(".todolist").html("<%= escape_javascript render(:partial => 'todolist', :locals => { :todo => @todolist  }) %>");
+}else{
+  $(".todolist").prepend("<%= escape_javascript render(:partial => 'todolist', :locals => { :todo => @todolist }) %>");
+}
+
+$('.createtodo').val('');
 reset_arrow();
-  
