@@ -15,12 +15,10 @@ class TodosController < ApplicationController
   def check_params(params)
     if params.key?(:search)
       search
-      # @list_todos = Todo.search("%#{params[:search]}%").user(current_user)
     elsif params.key?(:active)
-      @list_todos = params[:active] =="inactive" ? Todo.inactive_todos :  Todo.active_todos
-      @list_todos = @list_todos.user(current_user)
+      @list_todos =  print_todos(params[:active] == "active")
     else
-      @list_todos = print_todos(true)
+  p    @list_todos = print_todos(true)
     end
   end
 
@@ -29,18 +27,12 @@ class TodosController < ApplicationController
     @todolist = Todo.new(todo_params)
     current_priority = Todo.search_index
     @todolist.update(priority: current_priority+1)
-    if @todolist.save
-      print_todos(true)
-    else
-      print_todos(true)
-    end
-    @count = Todo.active_todos.user(current_user)
+    @count = Todo.active_inactive(true).user(current_user).order(priority: :desc).count
   end
 
   #calling from each method
   def print_todos(status)
-    @list_todos = status == true ? Todo.active_todos :  Todo.inactive_todos
-    @list_todos = @list_todos.user(current_user)
+    @list_todos = Todo.active_inactive(status).user(current_user).pagination(params[:page])
   end
 
   #search for body in the list
@@ -48,7 +40,7 @@ class TodosController < ApplicationController
     if params[:search] == ""
       @list_todos = print_todos(true)
     else
-      @list_todos = Todo.search("%#{params[:search]}%").user(current_user)
+      @list_todos = Todo.search("%#{params[:search]}%").user(current_user).pagination(params[:page])
     end
   end
 
@@ -79,17 +71,16 @@ class TodosController < ApplicationController
 
   #to change prority
   def change_position
-    @todo = Todo.find(params[:id])
-    current_todo = @todo
-    status = current_todo.active
-    array_todo = current_todo.active? ? Todo.active_todos.to_a : Todo.inactive_todos.to_a
+    p "---current---"
+    p @todo = Todo.find(params[:id])
+    status = @todo.active
     case params[:arrow]
     when "up"
       @arrow = "up"
-      Todo.position_up(current_todo,array_todo)
+      Todo.position_up(@todo,@todo.active,current_user)
     when "down"
       @arrow = "down"
-      Todo.position_down(current_todo,array_todo)
+      Todo.position_down(@todo,@todo.active,current_user)
     end
   end
 

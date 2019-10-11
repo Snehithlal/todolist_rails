@@ -37,7 +37,9 @@
   </div>
 
   <div class="comment-list">
-    <%= render '/comments/comments' %>
+    <% @comments.each do |comment|%>
+      <%= render '/comments/comments', comment: comment, commenter: @commenter %>
+    <% end %>
   </div>
 
   <div class="comment-box">

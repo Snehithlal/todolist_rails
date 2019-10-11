@@ -1,5 +1,4 @@
-<% @comments.each do |comment|%>
-  <div class="comments">
-    <%= comment.body %>
-  </div>
-<% end %>
+<div class="comment card">
+  <div class="card-body"><%= comment.body %></div>
+  <div class=""><%= commenter %> </div>
+</div>

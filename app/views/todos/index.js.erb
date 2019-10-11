@@ -1,4 +1,5 @@
 $(".todolist").html(  `<% if !@list_todos.empty? %>
+
     <% @list_todos.each do |todo| %>
   <%= render 'todolist', todo: todo %>
   <% end %>
@@ -8,5 +9,7 @@ $(".todolist").html(  `<% if !@list_todos.empty? %>
   Nothing
   </div>
   </div>
-  <% end %>`);
+  <% end %>
+    <div class="apple_pagination"><%= will_paginate @list_todos,:page_links => false  %></div>`);
+  $('.pagination a').attr('data-remote', 'true')
 reset_arrow();

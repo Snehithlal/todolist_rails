@@ -8,19 +8,22 @@
   <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, method: :get } %>
   <label for="active_inactive">Inactive</label>
   </div>
+
   <div class="todolist">
     <% if !@list_todos.empty? %>
+
+
       <% @list_todos.each do |todo| %>
-    <%= render 'todolist', todo: todo %>
-    <% end %>
-    <% else %>
+        <%= render 'todolist', todo: todo %>
+      <% end %>
+      <% else %>
     <div class="card posttodo">
     <div class="card-text">
     Nothing
     </div>
     </div>
     <% end %>
-
+  <div class="apple_pagination"><%= will_paginate @list_todos,:page_links => false  %></div>
   </div>
 
 
@@ -37,6 +40,10 @@ function reset_arrow(){
   $('.up').first().addClass("invisible");
   $('.down').last().addClass("invisible");
 }
+
+$(function(){
+  $('.pagination a').attr('data-remote', 'true')
+});
 
 reset_arrow();
 

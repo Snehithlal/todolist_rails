@@ -4,6 +4,7 @@ class CommentsController < ApplicationController
     @todo = Todo.find(params[:todo_id])
     @comment = @todo.comments.create(comment_params)
     @comments = @todo.comments
+    @commenter =  User.find(@todo[:user_id])[:name]
   end
 
   private
