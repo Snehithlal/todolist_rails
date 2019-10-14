@@ -1,2 +1,9 @@
-$('#<%= j @todolist.id %>').remove();
+is_inactive = $('#<%= j @todolist.id %> .img-check').hasClass("inactive");
+if (is_inactive){
+  $('#<%= j @todolist.id %> .img-check').removeClass("inactive").addClass("check");
+}
+else{
+    $('#<%= j @todolist.id %> .img-check').addClass("inactive");
+}
+
 reset_arrow();

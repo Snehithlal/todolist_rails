@@ -27,12 +27,12 @@ class TodosController < ApplicationController
     @todolist = Todo.new(todo_params)
     current_priority = Todo.search_index
     @todolist.update(priority: current_priority+1)
-    @count = Todo.active_inactive(true).user(current_user).order(priority: :desc).count
+    @count = Todo.user(current_user).active_inactive(true).order(priority: :desc).count
   end
 
   #calling from each method
   def print_todos(status)
-    @list_todos = Todo.active_inactive(status).user(current_user).pagination(params[:page])
+    @list_todos = Todo.user(current_user).active_inactive(status).pagination(params[:page])
   end
 
   #search for body in the list
@@ -40,7 +40,7 @@ class TodosController < ApplicationController
     if params[:search] == ""
       @list_todos = print_todos(true)
     else
-      @list_todos = Todo.search("%#{params[:search]}%").user(current_user).pagination(params[:page])
+      @list_todos = Todo.user(current_user).search("%#{params[:search]}%").pagination(params[:page])
     end
   end
 
@@ -50,7 +50,7 @@ class TodosController < ApplicationController
     status = @todolist.active
     @todolist.active? ? @todolist.update(active: false) : @todolist.update(active: true)
     @todolist.save
-    Todo.update_position
+    # Todo.update_position
     print_todos(status)
   end
 
@@ -71,16 +71,14 @@ class TodosController < ApplicationController
 
   #to change prority
   def change_position
-    p "---current---"
-    p @todo = Todo.find(params[:id])
-    status = @todo.active
+    @todo = Todo.find(params[:id])
     case params[:arrow]
     when "up"
       @arrow = "up"
-      Todo.position_up(@todo,@todo.active,current_user)
+      Todo.position_up(@todo,current_user)
     when "down"
       @arrow = "down"
-      Todo.position_down(@todo,@todo.active,current_user)
+      Todo.position_down(@todo,current_user)
     end
   end
 

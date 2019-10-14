@@ -37,8 +37,8 @@ body {
   color: #354B5C;
 }
 .todolist{
-  overflow: auto;
-  height: 600px;
+  overflow-y: scroll;
+  height: 500px;
   scrollbar-width: none
 }
 .todolist::-webkit-scrollbar {
@@ -180,6 +180,7 @@ p{
 //will_paginate
 .apple_pagination {
   // background: #f1f1f1;
+  display: none;
   border: 1px solid #e5e5e5;
   text-align: center;
   padding: 1em;

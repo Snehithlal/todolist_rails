@@ -8,9 +8,7 @@ class Todo < ApplicationRecord
   scope :user, lambda { |keyword| where(user_id: keyword.id) }
   scope :up, lambda { |current_todo| where("priority > ?",current_todo.priority).limit(1) }
   scope :down, lambda { |current_todo| where("priority < ?",current_todo.priority).order(priority: :desc).limit(1) }
-  scope :pagination, lambda {
-     |keyword| order(priority: :desc).paginate(page: keyword, per_page: 4)
-   }
+  scope :pagination, lambda { |keyword| order(priority: :desc).paginate(page: keyword, per_page: 5) }
 
   #sort todo based on id for listing newest first
   def self.sorted_todos
@@ -26,17 +24,17 @@ class Todo < ApplicationRecord
   end
 
   #position_up
-  def self.position_up(current_todo,status,current_user)
-    previous_todo = Todo.active_inactive(status).user(current_user).up(current_todo)
-    previous = previous_todo[0][:priority]
-    current = current_todo[:priority]
-    current_todo.update(priority: previous)
-    previous_todo.update(priority: current)
+  def self.position_up(current_todo,current_user)
+    previous_todo = Todo.active_inactive(current_todo.active).user(current_user).up(current_todo)
+    previous_priority = previous_todo[0][:priority]
+    current_priority = current_todo[:priority]
+    current_todo.update(priority: previous_priority)
+    previous_todo.update(priority: current_priority)
   end
 
   #position_down
-  def self.position_down(current_todo,status,current_user)
-    next_todo = Todo.active_inactive(status).user(current_user).down(current_todo)
+  def self.position_down(current_todo,current_user)
+    next_todo = Todo.active_inactive(current_todo.active).user(current_user).down(current_todo)
     next_priority = next_todo[0][:priority]
     current_priority = current_todo[:priority]
     current_todo.update(priority: next_priority)

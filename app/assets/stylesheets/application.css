@@ -18,6 +18,8 @@
 
 .container{
   max-width: 700px;
+  /* max-height: 600px; */
+  /* overflow-y: scroll; */
   margin: 0 auto;
 }
 

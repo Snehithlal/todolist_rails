@@ -8,7 +8,7 @@
   <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, method: :get } %>
   <label for="active_inactive">Inactive</label>
   </div>
-
+<div class="apple_pagination"><%= will_paginate @list_todos %></div>
   <div class="todolist">
     <% if !@list_todos.empty? %>
 
@@ -23,28 +23,43 @@
     </div>
     </div>
     <% end %>
-  <div class="apple_pagination"><%= will_paginate @list_todos,:page_links => false  %></div>
+
   </div>
-
-
 <script>
   $("#search").keyup(function() {
     $.ajax({
        url: '/todos/search',
        data: {search: $(this).val()}
     });
-});
-function reset_arrow(){
+  });
+
+  $("#active_active").click(function(){
+    $(".todolist").empty();
+  });
+
+  $("#active_inactive").click(function(){
+    $(".todolist").empty();
+  })
+
+
+  function reset_arrow(){
   $('.up').removeClass("invisible");
   $('.down').removeClass("invisible");
   $('.up').first().addClass("invisible");
   $('.down').last().addClass("invisible");
-}
+  }
 
-$(function(){
+  $(function(){
   $('.pagination a').attr('data-remote', 'true')
-});
+  });
 
-reset_arrow();
+
+  reset_arrow();
+  $('.todolist').on('scroll', function(){
+    if ($('.todolist')[0].scrollHeight - $('.todolist').scrollTop() == $('.todolist').outerHeight()-15)
+   {
+          $('.pagination .next_page')[0].click();
+      }
+  }).scroll();
 
 </script>
