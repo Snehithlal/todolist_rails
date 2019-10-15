@@ -2,10 +2,16 @@
 $('.apple_pagination').html(`<%=will_paginate @list_todos %>`)
 $('.todolist').append(`
   <% if !@list_todos.empty? %>
-  <% @list_todos.each do |todo| %>
-  <%= render 'todolist', todo: todo %>
-  <% end %>
-  <% end %>
+      <% @list_todos.each do |todo| %>
+    <%= render 'todolist', todo: todo %>
+    <% end %>
+    <% else %>
+    <div class="card posttodo">
+    <div class="card-text">
+    Nothing
+    </div>
+    </div>
+    <% end %>
 `)
 
   $('.pagination a').attr('data-remote', 'true')

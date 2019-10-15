@@ -1,3 +1,4 @@
+
 <div class="back"><%= link_to "<back to home", root_path %></div>
 
   <div class="todo-details">
@@ -17,9 +18,9 @@
       <div class="task-complete">
         <p>Task Completion</p>
       </div>
-      <div class="row">
+      <div class="row task-status">
         <div class="progress col-11">
-          <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+          <div class="progress-bar" role="progressbar" style="width: <%=@todo_details.task_status%>%;" aria-valuenow="<%=@todo_details.task_status%>" aria-valuemin="0" aria-valuemax="100"><%=@todo_details.task_status%>%</div>
         </div>
         <div class="flex-fill border-0 col-1">
           <%= link_to todos_status_update_path(id:@todo_details.id), data: { remote: true, url: url_for(action: :status_update), method: :post } do %>
@@ -38,10 +39,36 @@
 
   <div class="comment-list">
     <% @comments.each do |comment|%>
-      <%= render '/comments/comments', comment: comment, commenter: @commenter %>
+      <%= render '/comments/comments', comment: comment%>
     <% end %>
   </div>
 
   <div class="comment-box">
     <%= render '/comments/form' %>
   </div>
+
+
+
+  <script>
+    var todo_id = <%= @todo_details.id %>;
+    $('.progress').click(function(event){
+      var currentProgress = $('.progress-bar').attr('aria-valuenow');
+      var xPosition = event.pageX - $(this).offset().left;
+      var width = (((($(this).children())[0])["style"])["width"]);
+      var newProgress = Math.round((xPosition/575)*100);
+
+      $.ajax({
+        type: 'POST',
+        url: '/todos/' + todo_id + '/comments',
+        data: {new_status: newProgress, old_status: currentProgress},
+        success: function(){
+          if (width != newProgress+"%"){
+            $('.progress-bar').css('width',newProgress+'%');
+            $('.progress-bar').attr('aria-valuenow',newProgress);
+            $('.progress-bar').text(newProgress+"%");
+          }
+        }
+      });
+    });
+
+  </script>

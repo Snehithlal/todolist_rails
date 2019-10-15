@@ -1,5 +1,5 @@
 <%= form_with(model: [ @todo_details, @todo_details.comments.build ], remote: true) do |form| %>
   <p>
-    <%= form.text_field :body ,placeholder: "Add the comment Hit enter to post"%>
+    <%= form.text_field :body ,placeholder: "Add the comment Hit enter to post", class: "command-form"%>
   </p>
 <% end %>

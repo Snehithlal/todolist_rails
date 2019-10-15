@@ -67,6 +67,7 @@ class TodosController < ApplicationController
   def show
     @todo_details = Todo.find(params[:id])
     @comments = @todo_details.comments
+    @commenter =  User.find(@todo_details[:user_id])[:name]
   end
 
   #to change prority

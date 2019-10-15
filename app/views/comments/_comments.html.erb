@@ -1,4 +1,24 @@
-<div class="comment card">
-  <div class="card-body"><%= comment.body %></div>
-  <div class=""><%= commenter %> </div>
+<% unless comment.id.nil? %>
+
+
+<!-- <p> com[0][0] <span class="green"> com[0][1] </span> com[1][0] <span class = "green"> com[1][1] </span></p> -->
+<div class="comment">
+  <div class="comment-body">
+    <% if comment.body.scan(/([\w ]+) ([\d]+)%/) != [] %>
+      <% com =  comment.body.scan(/([\w ]+) ([\d]+)%/) %>
+      <p><%= com[0][0]%> <span class="green"> <%=com[0][1]%>%</span> <%=com[1][0]%> <span class = "green"> <%=com[1][1]%>%. </span></p>
+    <% elsif comment.body.scan(/([\w ]+)(done)$/) != [] %>
+    <% com =  comment.body.scan(/([\w ]+)(done)$/) %>
+      <p><%= com[0][0]%> <span class="green"> <%=com[0][1]%>.</span></p>
+    <% else %>
+      <p><%=comment.body%></p>
+    <% end %>
+
+
+  </div>
+  <div class="comment-foot row">
+    <div class="comment-name col-2"><%= User.find(comment.user_id)[:name] %> </div>
+    <div class="comment-time col-10">on <%= comment.created_at.strftime('%l.%M %P, %-d %B %Y') %> </div>
+  </div>
 </div>
+<%end%>

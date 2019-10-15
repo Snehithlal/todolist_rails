@@ -5,9 +5,37 @@
  border-width: 0px 0px 1px 0px;
  border-bottom: 1px solid gray;
  border-radius: 0px;
+ padding-left: 10px;
+ // background-color: gray;
 }
 .comment-list{
   padding: 10px;
-  background-color: white;
+  background-color: #F4F4F4;
+  margin-bottom: 15px;
+  border: 1px solid gray;
+  border-collapse: collapse;
+}
+.comment-body{
+  padding: 5px 0px;
+}
+.comment-name{
+  max-width: 6%;
+  font-weight: bold;
+  font-size: 12px;
+}
 
+.comment-time{
+  color: gray;
+  font-size: 12px;
+  padding: 3px 20px;
+}
+.comment-foot{
+  padding: 3px 0px;
+}
+.command-form{
+  width: 100%;
+  padding: 5px;
+}
+.green{
+  color: green;
 }

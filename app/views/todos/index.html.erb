@@ -3,7 +3,7 @@
 </div>
   <%= render 'form' %>
   <div class="switch-field">
-  <%= radio_button_tag 'active', 'active', true , data: { remote: true, method: :get } %>
+  <%= radio_button_tag 'active', 'active', false , data: { remote: true, method: :get } %>
   <label for="active_active">Active</label>
   <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, method: :get } %>
   <label for="active_inactive">Inactive</label>
@@ -25,8 +25,15 @@
     <% end %>
 
   </div>
+  <!-- <div class="loading">
+    Loading...
+  </div> -->
+
+
 <script>
+  $('#active_active').attr('checked','true');
   $("#search").keyup(function() {
+    $(".todolist").empty();
     $.ajax({
        url: '/todos/search',
        data: {search: $(this).val()}
@@ -34,11 +41,22 @@
   });
 
   $("#active_active").click(function(){
-    $(".todolist").empty();
+    if ($(this).attr('checked') != 'checked'){
+      $(".todolist").empty();
+    }
+    $(this).attr('checked',true);
+    $('#active_inactive').attr('checked',false);
+
+
   });
 
   $("#active_inactive").click(function(){
-    $(".todolist").empty();
+    if ($(this).attr('checked') != 'checked'){
+      $(".todolist").empty();
+    }
+    $(this).attr('checked',true);
+    $('#active_active').attr('checked',false);
+
   })
 
 
@@ -55,8 +73,9 @@
 
 
   reset_arrow();
+
   $('.todolist').on('scroll', function(){
-    if ($('.todolist')[0].scrollHeight - $('.todolist').scrollTop() == $('.todolist').outerHeight()-15)
+    if ($('.todolist')[0].scrollHeight - $('.todolist').scrollTop() == $('.todolist').outerHeight())
    {
           $('.pagination .next_page')[0].click();
       }
