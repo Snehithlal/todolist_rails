@@ -3,9 +3,9 @@ class CommentsController < ApplicationController
   respond_to :js
   def create
     if params[:new_status] != params[:old_status]
-      comment = "task has been updated from #{params[:old_status]}% to #{params[:new_status]}%."
+      comment = "task has been updated from <span class=\"green\">#{params[:old_status]}%</span> to <span class=\"green\">#{params[:new_status]}%.</span>"
       if params[:new_status] == "100"
-        comment = "status of the task changed to done"
+        comment = "status of the task changed to <span class=\"green\">done</span>"
       end
     end
     @todo = Todo.find(params[:todo_id])

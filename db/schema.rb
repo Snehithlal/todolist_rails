@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_091750) do
+ActiveRecord::Schema.define(version: 2019_10_17_053109) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.text "body"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 2019_10_15_091750) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["todo_id"], name: "index_comments_on_todo_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "shares", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.bigint "todo_id", null: false
+    t.bigint "user_id", null: false
+    t.boolean "is_owner", default: false
+    t.bigint "priority", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["todo_id"], name: "index_shares_on_todo_id"
+    t.index ["user_id"], name: "index_shares_on_user_id"
   end
 
   create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -48,5 +59,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_091750) do
 
   add_foreign_key "comments", "todos"
   add_foreign_key "comments", "users"
+  add_foreign_key "shares", "todos"
+  add_foreign_key "shares", "users"
   add_foreign_key "todos", "users"
 end

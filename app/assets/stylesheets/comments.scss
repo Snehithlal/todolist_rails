@@ -2,35 +2,37 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .comment{
- border-width: 0px 0px 1px 0px;
- border-bottom: 1px solid gray;
+ border-bottom: 1px solid #ccc;
  border-radius: 0px;
  padding-left: 10px;
+ margin-bottom: -1px;;
  // background-color: gray;
 }
 .comment-list{
-  padding: 10px;
   background-color: #F4F4F4;
   margin-bottom: 15px;
-  border: 1px solid gray;
+  border: 1px solid #ccc;
   border-collapse: collapse;
+  padding: 0 10px;
+  margin-top: -1px;
 }
 .comment-body{
   padding: 5px 0px;
+  margin-top: 10px;
 }
 .comment-name{
   max-width: 6%;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .comment-time{
   color: gray;
-  font-size: 12px;
-  padding: 3px 20px;
+  font-size: 14px;
+  padding-left: 50px;
 }
 .comment-foot{
-  padding: 3px 0px;
+  padding-bottom: 15px;
 }
 .command-form{
   width: 100%;

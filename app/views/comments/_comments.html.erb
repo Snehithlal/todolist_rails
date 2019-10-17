@@ -4,17 +4,7 @@
 <!-- <p> com[0][0] <span class="green"> com[0][1] </span> com[1][0] <span class = "green"> com[1][1] </span></p> -->
 <div class="comment">
   <div class="comment-body">
-    <% if comment.body.scan(/([\w ]+) ([\d]+)%/) != [] %>
-      <% com =  comment.body.scan(/([\w ]+) ([\d]+)%/) %>
-      <p><%= com[0][0]%> <span class="green"> <%=com[0][1]%>%</span> <%=com[1][0]%> <span class = "green"> <%=com[1][1]%>%. </span></p>
-    <% elsif comment.body.scan(/([\w ]+)(done)$/) != [] %>
-    <% com =  comment.body.scan(/([\w ]+)(done)$/) %>
-      <p><%= com[0][0]%> <span class="green"> <%=com[0][1]%>.</span></p>
-    <% else %>
-      <p><%=comment.body%></p>
-    <% end %>
-
-
+    <p><%=comment.body.html_safe%></p>
   </div>
   <div class="comment-foot row">
     <div class="comment-name col-2"><%= User.find(comment.user_id)[:name] %> </div>

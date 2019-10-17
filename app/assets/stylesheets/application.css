@@ -18,7 +18,7 @@
 
 .container{
   max-width: 700px;
-  /* max-height: 600px; */
+  max-height: 400px;
   /* overflow-y: scroll; */
   margin: 0 auto;
 }
@@ -34,7 +34,7 @@
   /* margin: 0px; */
 }
 .linkitems{
-  padding: 0 30px;
+  padding-left: 45px;
 }
 
 

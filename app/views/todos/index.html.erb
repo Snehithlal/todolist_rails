@@ -1,3 +1,4 @@
+
 <div class="search-box">
 <%= text_field_tag :search , "", placeholder: "search",autofocus: true, class: "search"%>
 </div>
@@ -25,60 +26,81 @@
     <% end %>
 
   </div>
-  <!-- <div class="loading">
-    Loading...
-  </div> -->
+
+  <div class="spinner-border loading" role="status">
+    <p class="sr-only">Loading...</p>
+  </div>
 
 
-<script>
-  $('#active_active').attr('checked','true');
-  $("#search").keyup(function() {
-    $(".todolist").empty();
-    $.ajax({
-       url: '/todos/search',
-       data: {search: $(this).val()}
+  <script>
+    $('#active_active').click();
+    $('#active_active').attr('checked',true);
+    $("#search").keyup(function() {
+      $(".todolist").empty();
+      $.ajax({
+         url: '/todos/search',
+         data: {search: $(this).val()}
+      });
     });
-  });
-
-  $("#active_active").click(function(){
-    if ($(this).attr('checked') != 'checked'){
-      $(".todolist").empty();
-    }
-    $(this).attr('checked',true);
-    $('#active_inactive').attr('checked',false);
-
-
-  });
-
-  $("#active_inactive").click(function(){
-    if ($(this).attr('checked') != 'checked'){
-      $(".todolist").empty();
-    }
-    $(this).attr('checked',true);
-    $('#active_active').attr('checked',false);
-
-  })
-
-
-  function reset_arrow(){
-  $('.up').removeClass("invisible");
-  $('.down').removeClass("invisible");
-  $('.up').first().addClass("invisible");
-  $('.down').last().addClass("invisible");
-  }
-
-  $(function(){
-  $('.pagination a').attr('data-remote', 'true')
-  });
-
-
-  reset_arrow();
-
-  $('.todolist').on('scroll', function(){
-    if ($('.todolist')[0].scrollHeight - $('.todolist').scrollTop() == $('.todolist').outerHeight())
-   {
-          $('.pagination .next_page')[0].click();
+    $("#active_active").click(function(){
+      if ($("#active_active").attr('checked') != 'checked'){
+        $(".todolist").empty();
       }
-  }).scroll();
+      $("#active_active").attr('checked',true);
+      $('#active_inactive').attr('checked',false);
 
-</script>
+    });
+
+    $("#active_inactive").click(function(){
+      if ($("#active_inactive").attr('checked') != 'checked'){
+        $(".todolist").empty();
+      }
+      $("#active_inactive").attr('checked',true);
+      $('#active_active').attr('checked',false);
+
+    });
+
+    $('.loading').hide();
+    function reset_arrow(){
+    $('.up').removeClass("invisible");
+    $('.down').removeClass("invisible");
+    $('.up').first().addClass("invisible");
+    $('.down').last().addClass("invisible");
+  };
+
+    $(function(){
+    $('.pagination a').attr('data-remote', 'true')
+    });
+
+    function infinite_scroll(box){
+      if (box[0].scrollHeight - box.scrollTop() == box.outerHeight())
+     {
+       $('.loading').show().fadeOut(1000);
+        if ($('.pagination .next_page').hasClass('disabled')){
+          $('.loading').hide();
+        }
+        if(box.html() == ""){
+        }else{
+          $('.pagination .next_page')[0].click();
+        }
+      }
+    };
+
+
+    reset_arrow();
+
+    $('.todolist').on('scroll', function(){
+      if ($('.todolist')[0].scrollHeight - $('.todolist').scrollTop() == $('.todolist').outerHeight())
+     {
+       $('.loading').show().fadeOut(1000);
+        if ($('.pagination .next_page').hasClass('disabled')){
+          $('.loading').hide();
+        }
+        if($('.todolist').html() == ""){
+        }else{
+          $('.pagination .next_page')[0].click();
+        }
+      }
+    });
+
+  </script>

@@ -3,7 +3,7 @@ class TodosController < ApplicationController
   respond_to :html
 
   def index
-    @todolists = Todo.all
+    # @todolists = Todo.all
     @list_todos = check_params(params)
   end
 
@@ -18,14 +18,14 @@ class TodosController < ApplicationController
     elsif params.key?(:active)
       @list_todos =  print_todos(params[:active] == "active")
     else
-  p    @list_todos = print_todos(true)
+      @list_todos = print_todos(true)
     end
   end
 
   #create todo and update priority
   def create
     @todolist = Todo.new(todo_params)
-    current_priority = Todo.search_index
+    current_priority = Todo.search_index(current_user.id)
     @todolist.update(priority: current_priority+1)
     @count = Todo.user(current_user).active_inactive(true).order(priority: :desc).count
   end
@@ -61,6 +61,12 @@ class TodosController < ApplicationController
     status = @todolist.active
     @todolist.destroy
     print_todos(status)
+    url = Rails.application.routes.recognize_path(request.referrer)
+    if (p url[:action] == 'show')
+      redirect_to root_path
+    else
+    end
+
   end
 
   #show todo link and comments
