@@ -1,6 +1,7 @@
-
+<div class="search-box">
+<%= text_field_tag :search , "", placeholder: "search",autofocus: true, class: "search"%>
+</div>
 <div class="back"><%= link_to "< Go back to home", root_path %></div>
-
   <div class="todo-details">
     <div class="row">
       <div class="col-11 todo-body">
@@ -24,17 +25,46 @@
         </div>
         <div class="flex-fill border-0 col-1 todo-img">
           <%= link_to todos_status_update_path(id:@todo_details.id), data: { remote: true, url: url_for(action: :status_update), method: :post } do %>
-          <i class=" img-check material-icons <%=@todo_details.active? ? "check" : "inactive"%>">check_circle</i>
+          <div class=" img-check material-icons">check_circle</div>
           <%end%>
         </div>
       </div>
 
     <div class="share">
-      <p><span class="sharedwith">Shared with:</span>snehith,ferbin,shreyas</p>
+      <p><span class="sharedwith">Shared with:</span><span class="shared-with">
+          <%@shared_with.each do |user| %>
+          <%= render '/shares/shared_users', user: user %>
+          <%end%>
+      </span></p>
     </div>
 
-    <div><button type="button" class="btn btn-outline-secondary"><p>Share this</p></button></div>
+    <div><button type="button" class="btn btn-outline-secondary">Share this</button></div>
 
+  </div>
+
+
+  <div id="overlay">
+    <div class="user-list">
+      <div class="add-people">
+        Add people to this task
+      </div>
+      <div class="shared-users">
+        <%unless @users.nil?%>
+          <%@users.each do |user|%>
+          <%= render '/shares/sharelist', user: user%>
+          <%end%>
+        <%end%>
+
+      </div>
+      <div class="user-footer">
+        <div class="save-share">
+          <button type="button" class="save-share-btn">Save</button>
+        </div>
+        <div class="cancel-share" onclick="off()">
+            Cancel
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="comment-list">
@@ -47,14 +77,40 @@
     <%= render '/comments/form' %>
   </div>
 
+
+
+
+
   <script>
     var todo_id = <%= @todo_details.id %>;
+    var current_user_id = <%= @todo_details.user_id %>;
+    var todo_owner = <%= @todo_details.is_owner %>;
+    var is_todo_active = <%= @todo_details.active? %>;
+
+    function off() {
+      document.getElementById("overlay").style.display = "none";
+    }
+
+    //add class during startup for ok icon
+    if (is_todo_active){
+      $(".img-check").addClass("check");
+    }else{
+      $(".img-check").addClass("inactive");
+    }
+
+    //hide from other users
+    if (!todo_owner){
+      $('.delete_todo, .todo-img, .btn').hide();
+    }
+
+    //change the progress when clicked
     $('.progress').click(function(event){
       var currentProgress = $('.progress-bar').attr('aria-valuenow');
       var xPosition = event.pageX - $(this).offset().left;
       var width = (((($(this).children())[0])["style"])["width"]);
       var newProgress = Math.round((xPosition/575)*100);
 
+      //remotely sent status to comment controller
       $.ajax({
         type: 'POST',
         url: '/todos/' + todo_id + '/comments',
@@ -69,16 +125,49 @@
       });
     });
 
-    $(".img-check").click(function(){
-
-      is_inactive = $('#<%= @todo_details.id %> .img-check').hasClass("inactive");
-      if (is_inactive){
-        $('#<%= @todo_details.id %> .img-check').removeClass("inactive").addClass("check");
-      }
-      else{
-          $('#<%=  @todo_details.id %> .img-check').addClass("inactive");
-      }
+    //view users to share and overlay
+    $(".btn").click(function(){
+      document.getElementById("overlay").style.display = "block";
+      $.ajax({
+          type: 'GET',
+          url: '/shares/',
+          data: {todo_id: todo_id, current_user_id: current_user_id}
+      });
     });
+    // change status of the image ok button
+    $(".img-check").click(function(){
+    var is_active = $(".img-check").hasClass("inactive")
+    if(is_active){
+      $(".img-check").removeClass("inactive");
+      $(".img-check").addClass("check");
+    }else{
+        $(".img-check").removeClass("check");
+        $(".img-check").addClass("inactive");
+    }
+    });
+
+  //save button clicked
+  $(".save-share-btn").click(function(){
+    off();
+    var users = new Array();
+    $("input[name='user-check']:checked").each(function(i) {
+       users.push($(this).attr("id"));
+     });
+
+     if (users.length == 0){
+       users.push(0);
+     }
+     $.ajax({
+         type: 'POST',
+         url: '/shares/',
+         data: {user_array: users,todo_id: todo_id}
+     });
+  });
+
+  //Remove comm from last name
+$(".comma").last().remove();
+
+
 
 
   </script>

@@ -33,7 +33,9 @@
 
 
   <script>
-    $('#active_active').click();
+    // $('.todolist').empty();
+    // $('#active_active').click();
+
     $('#active_active').attr('checked',true);
     $("#search").keyup(function() {
       $(".todolist").empty();
@@ -86,6 +88,7 @@
       }
     };
 
+    // console.log($('.todolist');
 
     reset_arrow();
 
@@ -102,5 +105,6 @@
         }
       }
     });
+
 
   </script>

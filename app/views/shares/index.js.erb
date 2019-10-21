@@ -1,0 +1,10 @@
+$(".shared-users").html(` <%unless @users.nil?%>
+        <%@users.each do |user|%>
+        <%= render '/shares/sharelist', user: user,user_id: @current_user %>
+        <%end%>
+      <%end%>`);
+
+<%@shared_users.each do |shared|%>
+   $(".user-name #<%=shared.user_id%>").attr('checked',true);
+   $(".user-name #<%=shared.user_id%>").attr('value',true);
+ <%end%>

@@ -21,7 +21,7 @@ body {
   padding: 5px;
   color: gray;
   background: transparent;
-  border: 1px solid gray;
+  border: 1px solid #ccc;
   z-index:1;
 }
 
@@ -29,7 +29,7 @@ body {
 .createtodo {
   width: 100%;
   border: 1px solid green;
-  margin: 10px 0;
+  margin: 40px 0;
   padding: 5px;
 }
 
@@ -58,7 +58,6 @@ body {
   margin: 40px 0;
 }
 .search-box{
-  margin: -50px 0 20px 0;
   position: absolute;
   z-index: 1;
 }
@@ -98,7 +97,6 @@ font-size: 16px;
 //ractive inactive radio button
 .switch-field {
   display: flex;
-  margin-top: 30px;
   overflow: hidden;
 }
 
@@ -180,12 +178,14 @@ font-size: 16px;
 .share p{
   font-size: 14px;
   padding-bottom: 10px;
+  display: inline;
 }
 p{
   margin: 0;
   color: black;
 }
 .back{
+  margin-top: 75px;
   margin-bottom: 25px;
 }
 .back a{

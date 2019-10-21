@@ -1,0 +1,6 @@
+$(".share").html(`<p><span class="sharedwith">Shared with:</span><span class="shared-with">
+          <%@shared_with.each do |user| %>
+          <%= render '/shares/shared_users', user: user %>
+          <%end%>
+      </span></p> `)
+$(".comma").last().remove();

@@ -1,3 +1,113 @@
 // Place all the styles related to the Shares controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.user-list{
+  background: white;
+  width: 40%;
+  top: 25%;
+  left: 30%;
+  position: absolute;
+  padding: 20px;
+}
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+.user-footer{
+  padding: 15px 0px;
+  float: right;
+}
+.save-share{
+  float: left;
+  margin-right: 15px;;
+}
+.cancel-share{
+  float: left;
+  margin-left: 15px;
+  text-decoration: underline;
+}
+.shared-users{
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.user-name{
+  float: left;
+  width: 35%;
+  padding: 5px 0px;
+}
+.user-name:nth-child(3n+2){
+  float: left;
+  width: 35%;
+}
+.user-name:nth-child(3n){
+  float: left;
+  width: 30%;
+}
+
+.add-people{
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  font-size: 20px;
+}
+.save-share-btn{
+  background: white;
+  border: 1px solid gray;
+  border-radius: 2px;
+  padding: 0px 15px;
+  font-weight: bold;
+}
+
+.user-name input[type="checkbox"] {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #CACACA;
+  border-radius: 2px;
+  box-sizing: border-box;
+  position: relative;
+  box-sizing: content-box ;
+  width: 17px;
+  height: 17px;
+  border-width: 0;
+  transition: all .3s linear;
+}
+
+.user-name input[type="checkbox"]:focus{
+  outline: 0 none;
+  box-shadow: none;
+}
+
+.user-name input[type="checkbox"]:checked{
+  background-color: #00B697;
+  border-color:  #ffffff;
+}
+
+.user-name input[type="checkbox"]:checked:after {
+    opacity: 1;
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 5px;
+    background: transparent;
+    top: 5px;
+    left: 4px;
+    border: 2px solid #ffffff;
+    border-top: none;
+    border-right: none;
+
+    transform: rotate(-45deg);
+}
+.comma{
+  display: inline;
+}

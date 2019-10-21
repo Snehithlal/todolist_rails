@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_17_053109) do
+ActiveRecord::Schema.define(version: 2019_10_17_122936) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.text "body"
@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 2019_10_17_053109) do
   create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "body"
     t.boolean "active", default: true
-    t.bigint "priority"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

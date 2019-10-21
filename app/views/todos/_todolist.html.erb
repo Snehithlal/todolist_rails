@@ -1,4 +1,3 @@
-
     <div id="<%=todo.id%>" class="card posttodo" >
       <div class="row">
         <div class="col-8">
@@ -28,7 +27,7 @@
           <% end %>
 
         </li>
-
+      <%if todo.is_owner?%>
         <li class="list-group-items flex-fill border-0">
           <%= link_to todo_path(todo), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete_todo' do %>
           <i class="material-icons arrows">clear</i>
@@ -41,7 +40,7 @@
         <i class=" img-check material-icons <%=todo.active? ? "check" : "inactive"%>">check_circle</i>
       <%end%>
     </li>
-
+    <%end%>
   </ul>
 </div>
 

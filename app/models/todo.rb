@@ -4,7 +4,7 @@ class Todo < ApplicationRecord
   has_many :users, :through =>:shares, dependent: :destroy
   validates_presence_of :body
 
-  scope :active_inactive, lambda { |keyword| where(active: keyword)}
+  scope :active_inactive, lambda { |keyword| where("todos.active=?",keyword)}
   scope :search, lambda { |keyword| where("body LIKE ?", keyword).order(id: :desc) }
   scope :user, lambda { |keyword| where(user_id: keyword.id) }
   scope :up, lambda { |current_todo| where("priority > ?",current_todo.priority).limit(1) }
@@ -26,28 +26,31 @@ class Todo < ApplicationRecord
 
   #position_up
   def self.position_up(current_todo,current_user)
-    previous_todo = Todo.active_inactive(current_todo.active).user(current_user).up(current_todo)
-    previous_priority = previous_todo[0][:priority]
+    # previous_todo = Todo.active_inactive(current_todo.active).user(current_user).up(current_todo)
+    previous_todo = Todo.joins(:shares).select("todos.*,shares.priority").where("shares.user_id=? and todos.active=? and priority>?",current_user.id,current_todo.active?,current_todo.priority).order(priority: :asc).limit(1)[0]
+    previous_priority = previous_todo[:priority]
     current_priority = current_todo[:priority]
-    current_todo.update(priority: previous_priority)
-    previous_todo.update(priority: current_priority)
+    current_todo.shares.where(user_id: current_user.id)[0].update(priority: previous_priority)
+    previous_todo.shares.where(user_id: current_user.id)[0].update(priority: current_priority)
   end
 
   #position_down
   def self.position_down(current_todo,current_user)
-    next_todo = Todo.active_inactive(current_todo.active).user(current_user).down(current_todo)
-    next_priority = next_todo[0][:priority]
+    # next_todo = Todo.active_inactive(current_todo.active).user(current_user).down(current_todo)
+    next_todo = Todo.joins(:shares).select("todos.*,shares.priority").where("shares.user_id=? and todos.active=? and priority<?",current_user.id,current_todo.active?,current_todo.priority).order(priority: :desc).limit(1)[0]
+    next_priority = next_todo[:priority]
     current_priority = current_todo[:priority]
-    current_todo.update(priority: next_priority)
-    next_todo.update(priority: current_priority)
+    current_todo.shares.where(user_id: current_user.id)[0].update(priority: next_priority)
+    next_todo.shares.where(user_id: current_user.id)[0].update(priority: current_priority)
   end
 
   #search for index
   def self.search_index(current_user_id)
-    if (Todo.where(user_id: current_user_id).order(:priority)).empty?
+    @user = User.find(current_user_id)
+    if (@user.shares.order(:priority)).empty?
       return 0
     else
-      return Todo.where(user_id: current_user_id).order(:priority).last.priority
+      return @user.shares.order(:priority).last.priority
     end
   end
 

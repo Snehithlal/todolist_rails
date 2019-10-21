@@ -31,10 +31,14 @@
   color: gray;
 }
 .links{
-  /* margin: 0px; */
+  float: right;
+}
+.links a{
+  color: gray;
 }
 .linkitems{
   padding-left: 45px;
+  float: left;
 }
 
 
