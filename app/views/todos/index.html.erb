@@ -35,8 +35,10 @@
   <script>
     // $('.todolist').empty();
     // $('#active_active').click();
-
+    //initialize active status as true
     $('#active_active').attr('checked',true);
+
+    //search on key press
     $("#search").keyup(function() {
       $(".todolist").empty();
       $.ajax({
@@ -44,6 +46,8 @@
          data: {search: $(this).val()}
       });
     });
+
+    //radio button controll
     $("#active_active").click(function(){
       if ($("#active_active").attr('checked') != 'checked'){
         $(".todolist").empty();
@@ -62,18 +66,24 @@
 
     });
 
+    //loading animation
     $('.loading').hide();
-    function reset_arrow(){
-    $('.up').removeClass("invisible");
-    $('.down').removeClass("invisible");
-    $('.up').first().addClass("invisible");
-    $('.down').last().addClass("invisible");
-  };
 
+    //remove arrows from first and last position
+    function reset_arrow(){
+      $('.up').removeClass("invisible");
+      $('.down').removeClass("invisible");
+      $('.up').first().addClass("invisible");
+      $('.down').last().addClass("invisible");
+    };
+
+    //ajax for pagination
     $(function(){
     $('.pagination a').attr('data-remote', 'true')
     });
 
+    //for infinite scroll functon
+    //// FIXME: not working
     function infinite_scroll(box){
       if (box[0].scrollHeight - box.scrollTop() == box.outerHeight())
      {
@@ -88,10 +98,9 @@
       }
     };
 
-    // console.log($('.todolist');
-
     reset_arrow();
 
+    //infinite scroll
     $('.todolist').on('scroll', function(){
       if ($('.todolist')[0].scrollHeight - $('.todolist').scrollTop() == $('.todolist').outerHeight())
      {

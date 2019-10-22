@@ -1,7 +1,9 @@
 <div class="search-box">
 <%= text_field_tag :search , "", placeholder: "search",autofocus: true, class: "search"%>
 </div>
+
 <div class="back"><%= link_to "< Go back to home", root_path %></div>
+<div class="show-todos"></div>
   <div class="todo-details">
     <div class="row">
       <div class="col-11 todo-body">
@@ -134,6 +136,7 @@
           data: {todo_id: todo_id, current_user_id: current_user_id}
       });
     });
+
     // change status of the image ok button
     $(".img-check").click(function(){
     var is_active = $(".img-check").hasClass("inactive")
@@ -166,6 +169,24 @@
 
   //Remove comm from last name
 $(".comma").last().remove();
+
+  //for search field
+  $("#search").keyup(function() {
+
+    if (($("#search").val()) == ''){
+      $(".show-todos").hide();
+      $('.todo-details,.overlay,.comment-list,.comment-box').show();
+    }else{
+      $(".show-todos").empty();
+      $(".show-todos").show();
+      $('.todo-details,.overlay,.comment-list,.comment-box').hide();
+    }
+    $.ajax({
+       url: '/todos/search',
+       data: {search: $(this).val()}
+    });
+  });
+
 
 
 

@@ -1,4 +1,21 @@
+<% url = Rails.application.routes.recognize_path(request.referrer)%>
+<% if (url[:action] == 'show')%>
+$('.apple_pagination').html(`<%=will_paginate @list_todos %>`)
+$('.show-todos').append(`
+  <% if !@list_todos.empty? %>
+      <% @list_todos.each do |todo| %>
+    <%= render 'todolist', todo: todo %>
+    <% end %>
+    <% else %>
+    <div class="card posttodo">
+    <div class="card-text">
+    Nothing
+    </div>
+    </div>
+    <% end %>
+`);
 
+<%else%>
 $('.apple_pagination').html(`<%=will_paginate @list_todos %>`)
 $('.todolist').append(`
   <% if !@list_todos.empty? %>
@@ -12,12 +29,13 @@ $('.todolist').append(`
     </div>
     </div>
     <% end %>
-`)
-
+`);
+<%end%>
   $('.pagination a').attr('data-remote', 'true')
   if ($(".search").val()){
     $('.up').addClass("invisible");
     $('.down').addClass("invisible");
+
   }else{
     reset_arrow();
   }

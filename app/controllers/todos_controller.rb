@@ -14,6 +14,7 @@ class TodosController < ApplicationController
   #check parameters
   def check_params(params)
     if params.key?(:search)
+
       search
     elsif params.key?(:active)
       @list_todos =  print_todos(params[:active] == "active")
@@ -33,7 +34,7 @@ class TodosController < ApplicationController
     current_priority = Todo.search_index(current_user.id)
     @share.update(priority: current_priority+1)
     @todolist = print_todos(true).where(id: @todolist.id)[0]
-    @count = Todo.user(current_user).active_inactive(true).order(priority: :desc).count
+    @count = Todo.where(user_id: current_user,active: true).count
   end
 
   #calling from each method
@@ -45,11 +46,13 @@ class TodosController < ApplicationController
 
   #search for body in the list
   def search
+
     if params[:search] == ""
       @list_todos = print_todos(true)
     else
       @list_todos = print_todos("").search("%#{params[:search]}%").paginate(page: params[:page], per_page: 4)
     end
+
   end
 
   #to change active status by checking db value
@@ -65,10 +68,11 @@ class TodosController < ApplicationController
     @todolist = Todo.find(params[:id])
     @todolist.destroy
     url = Rails.application.routes.recognize_path(request.referrer)
-    if (url[:action] == 'show')
-      redirect_to root_path
-    else
-    end
+    redirect_to root_path if (url[:action] == 'show')
+    # if (url[:action] == 'show')
+    #   redirect_to root_path
+    # else
+    # end
 
   end
 
