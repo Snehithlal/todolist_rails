@@ -6,9 +6,9 @@
   <div class="comment-body">
     <p><%=comment.body.html_safe%></p>
   </div>
-  <div class="comment-foot row">
-    <div class="comment-name col-2"><%= User.find(comment.user_id)[:name] %> </div>
-    <div class="comment-time col-10">on <%= comment.created_at.strftime('%l.%M %P, %-d %B %Y') %> </div>
+  <div class="comment-foot">
+    <div class="comment-name"><%= User.find(comment.user_id)[:name] %> </div>
+    <div class="comment-time">on <%= comment.created_at.strftime('%l.%M %P, %-d %B %Y') %> </div>
   </div>
 </div>
 <%end%>

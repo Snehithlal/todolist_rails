@@ -111,6 +111,7 @@
       var xPosition = event.pageX - $(this).offset().left;
       var width = (((($(this).children())[0])["style"])["width"]);
       var newProgress = Math.round((xPosition/575)*100);
+      if (newProgress <= 100 && newProgress >= 0){
 
       //remotely sent status to comment controller
       $.ajax({
@@ -125,6 +126,7 @@
           }
         }
       });
+    }
     });
 
     //view users to share and overlay

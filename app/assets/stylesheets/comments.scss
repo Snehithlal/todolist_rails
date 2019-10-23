@@ -5,7 +5,8 @@
  border-bottom: 1px solid #ccc;
  border-radius: 0px;
  padding-left: 10px;
- margin-bottom: -1px;;
+ margin-bottom: -1px;
+ overflow-wrap: break-word;
  // background-color: gray;
 }
 .comment-list{
@@ -23,14 +24,18 @@
 .comment-name{
   font-weight: bold;
   font-size: 14px;
+  float: left;
+  padding-right: 10px;
 }
 
 .comment-time{
   color: gray;
   font-size: 14px;
+  float: left;
 }
 .comment-foot{
   padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 .command-form{
   width: 100%;
