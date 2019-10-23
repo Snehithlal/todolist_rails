@@ -6,4 +6,6 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  scope :todo_owner, lambda{ |todoid,owner| where("todo_id=? and is_owner=?",todoid,owner) }
 end

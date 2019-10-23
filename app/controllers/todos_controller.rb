@@ -11,7 +11,7 @@ class TodosController < ApplicationController
     @todolist = Todo.new
   end
 
-  #check parameters
+  #check whether search or index default index
   def check_params(params)
     if params.key?(:search)
       search
@@ -22,10 +22,10 @@ class TodosController < ApplicationController
     end
   end
 
-  #create todo and update priority
+  #create todo and update priority added with last priority
   def create
     # TODO: add after create
-    @user = User.find(current_user.id)
+    @user = User.find_by(id: current_user.id)
     @todolist = Todo.new(todo_params)
     @todolist.save
     @share = Share.new(user_id: current_user.id,todo_id: @todolist.id, is_owner: true)
@@ -33,37 +33,38 @@ class TodosController < ApplicationController
     current_priority = Todo.search_index(current_user.id)
     @share.update(priority: current_priority+1)
     @todolist = print_todos(true).where(id: @todolist.id)[0]
-    @count = Todo.joins(:shares).where("shares.user_id=? and todos.active=true",current_user).count
+    @count = Todo.joins(:shares).user(current_user).is_active(true).count
   end
 
   #calling from each method
   def print_todos(status)
-    return  Todo.joins(:shares).select("shares.*,todos.*").where("shares.user_id=?",current_user.id).pagination(params[:page]) if status == ""
-    return Todo.joins(:shares).select("shares.*,todos.*").where("todos.active=? and shares.user_id=?",status,current_user.id).pagination(params[:page])
+    return  Todo.todojoinshare.user(current_user).pagination(params[:page]) if status == 0
+    return Todo.todojoinshare.is_active(status).user(current_user).pagination(params[:page])
   end
 
   #search for body in the list
+  #in show page search is null then normal show
   def search
 
-    if params[:search] == ""
-      @list_todos = print_todos(true)
+    if params[:search].present?
+      @list_todos = print_todos(0).search("%#{params[:search]}%").paginate(page: params[:page], per_page: 4)
     else
-      @list_todos = print_todos("").search("%#{params[:search]}%").paginate(page: params[:page], per_page: 4)
+      @list_todos = print_todos(true)
     end
 
   end
 
-  #to change active status by checking db value
+  #to change active status by checking db value when clicked tickbox
   def status_update
-    @todolist = Todo.find(params[:id])
-    @todolist.active? ? @todolist.update(active: false) : @todolist.update(active: true)
+    @todolist = Todo.find_by(id: params[:id])
+    @todolist.update(active: !@todolist.active?)
     @todolist.save
   end
 
 
   #destroy parameters
   def destroy
-    @todolist = Todo.find(params[:id])
+    @todolist = Todo.find_by(id: params[:id])
     @todolist.destroy
     url = Rails.application.routes.recognize_path(request.referrer)
     redirect_to root_path if (url[:action] == 'show')
@@ -72,16 +73,15 @@ class TodosController < ApplicationController
 
   #show todo link and comments
   def show
-    @todo_details = (Todo.joins(:shares).select("shares.*,todos.*").where("todos.id=? and shares.user_id=?",params[:id],current_user.id))[0]
+    @todo_details = (Todo.todojoinshare.sharedtodo(params[:id],current_user.id))[0]
     @comments = @todo_details.comments
-    @commenter =  User.find(@todo_details[:user_id])[:name]
-    @shared_with = User.joins(:shares).select("users.name").where("todo_id=?and is_owner=false",params[:id])
+    # @commenter =  User.find_by(name: @todo_details[:user_id])[:name]
+    @shared_with = User.joins(:shares).select("users.name").todo_owner(params[:id],false)
   end
 
   #to change prority
   def change_position
-    # @todo = Todo.find(params[:id])
-    @todo = (Todo.joins(:shares).select("shares.*,todos.*").where("todos.id=? and shares.user_id=?",params[:id],current_user.id))[0]
+    @todo = (Todo.todojoinshare.sharedtodo(params[:id],current_user.id))[0]
     case params[:arrow]
     when "up"
       @arrow = "up"
