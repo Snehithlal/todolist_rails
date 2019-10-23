@@ -53,7 +53,7 @@
       <div class="shared-users">
         <%unless @users.nil?%>
           <%@users.each do |user|%>
-          <%= render '/shares/sharelist', user: user%>
+            <%= render '/shares/sharelist', user: user%>
           <%end%>
         <%end%>
 
@@ -129,7 +129,7 @@
     }
     });
 
-    //view users to share and overlay
+    //view users to share and show overlay effect
     $(".btn").click(function(){
       document.getElementById("overlay").style.display = "block";
       $.ajax({
@@ -170,7 +170,7 @@
   });
 
   //Remove comm from last name
-$(".comma").last().remove();
+  $(".comma").last().remove();
 
   //for search field
   $("#search").keyup(function() {
