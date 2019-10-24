@@ -3,16 +3,12 @@ class Comment < ApplicationRecord
   belongs_to :todo
   belongs_to :user
 
-  def self.create_comment(params,comment_params)
+  def self.create_comment(params,current_user)
     comment = generate_comment(params)
-    @todo = Todo.find_by(id: params[:todo_id])
-    
-    if params.key?(:comment)
-      @comment = @todo.comments.create(comment_params)
-    else
-      @comment = @todo.comments.create(body: comment, user_id: comment_params[:user_id])
-      @todo.update(task_status: params[:new_status])
-    end
+    todo = Todo.find_by(id: params[:todo_id])
+    @comment = todo.comments.create(body: comment, user_id: current_user.id)
+    todo.update(task_status: params[:new_status])
+    @comment
   end
 
   def self.generate_comment(params)

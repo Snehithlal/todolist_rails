@@ -3,7 +3,11 @@ class CommentsController < ApplicationController
   respond_to :js
 
   def create
-    @comment = Comment.create_comment(params,comment_params)
+    if params.key?(:comment)
+      @comment = @todo.comments.create(comment_params)
+    else
+      @comment = Comment.create_comment(params,current_user)
+    end
   end
 
   private

@@ -13,6 +13,39 @@ class Todo < ApplicationRecord
   scope :pagination, lambda { |keyword| order(priority: :desc).paginate(page: keyword, per_page: 4) }
   scope :sharedtodo, lambda {|todoid,userid| where("todos.id=? and shares.user_id=?",todoid,userid)}
 
+  #current_user
+  # def self.logined_user(current_user)
+  #   @current_user = current_user
+  # end
+  #
+  # def self.parameters(params)
+  #   @params = params
+  # end
+
+  def self.add_priority(todo,current_user)
+    share = Share.new(user_id: current_user.id,todo_id: todo.id, is_owner: true)
+    share.save
+    current_priority = Todo.search_index(current_user.id)
+    share.update(priority: current_priority+1)
+  end
+
+  #check whether search or index default index
+  def self.check_params(params,current_user)
+    if params.key?(:search)
+      search
+    elsif params.key?(:active)
+      print_todos(params[:active] == "active",params,current_user)
+    else
+      print_todos(true,params,current_user)
+    end
+  end
+
+
+  #calling from each method
+  def self.print_todos(status,params,current_user)
+    return  self.todojoinshare.user(current_user).pagination(params[:page]) if status == 0
+    return self.todojoinshare.is_active(status).user(current_user).pagination(params[:page])
+  end
 
   #position_up
   def self.position_up(current_todo,current_user)
@@ -34,11 +67,11 @@ class Todo < ApplicationRecord
 
   #search for index
   def self.search_index(current_user_id)
-    @user = User.find(current_user_id)
-    if (@user.shares.order(:priority)).empty?
+    user = User.find(current_user_id)
+    if (user.shares.order(:priority)).empty?
       return 0
     else
-      return @user.shares.order(:priority).last.priority
+      return user.shares.order(:priority).last.priority
     end
   end
 
