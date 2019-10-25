@@ -23,6 +23,7 @@ class Todo < ApplicationRecord
   # end
 
   def self.add_priority(todo,current_user)
+    todo.save
     share = Share.new(user_id: current_user.id,todo_id: todo.id, is_owner: true)
     share.save
     current_priority = Todo.search_index(current_user.id)
@@ -45,6 +46,20 @@ class Todo < ApplicationRecord
   def self.print_todos(status,params,current_user)
     return  self.todojoinshare.user(current_user).pagination(params[:page]) if status == 0
     return self.todojoinshare.is_active(status).user(current_user).pagination(params[:page])
+  end
+
+  #positionchange
+  def self.position_update(params,current_user)
+    todo = (Todo.todojoinshare.sharedtodo(params[:id],current_user.id))[0]
+    case params[:arrow]
+    when "up"
+      arrow = "up"
+      position_up(todo,current_user)
+    when "down"
+      arrow = "down"
+      position_down(todo,current_user)
+    end
+    arrow
   end
 
   #position_up
@@ -73,6 +88,22 @@ class Todo < ApplicationRecord
     else
       return user.shares.order(:priority).last.priority
     end
+  end
+
+  #search
+  def self.search_params(params,current_user)
+    if params[:search].present?
+      print_todos(0,params,current_user).search("%#{params[:search]}%").paginate(page: params[:page], per_page: 4)
+    else
+      print_todos(true,params,current_user)
+    end
+  end
+
+  #status_update
+  def self.status_update(todo)
+    todo.update(active: !todo.active?)
+    todo.save
+    todo
   end
 
 end

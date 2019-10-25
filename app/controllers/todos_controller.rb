@@ -7,14 +7,12 @@ class TodosController < ApplicationController
   end
 
   def new
-    @todolist = Todo.new
+    @todo = Todo.new
   end
 
   #create todo and update priority added with last priority
   def create
-    # @user = User.find_by(id: current_user.id)
     todo = Todo.new(todo_params)
-    todo.save
     Todo.add_priority(todo,current_user)
     @todolist= Todo.print_todos(true,params,current_user).where(id: todo.id)[0]
     @count = Todo.joins(:shares).user(current_user).is_active(true).count
@@ -22,20 +20,13 @@ class TodosController < ApplicationController
 
   #in show page search is null then normal show
   def search
-
-    if params[:search].present?
-      @list_todos = Todo.print_todos(0,params,current_user).search("%#{params[:search]}%").paginate(page: params[:page], per_page: 4)
-    else
-      @list_todos = Todo.print_todos(true)
-    end
-
+    @list_todos = Todo.search_params(params,current_user)
   end
 
   #to change active status by checking db value when clicked tickbox
   def status_update
-    @todolist = Todo.find_by(id: params[:id])
-    @todolist.update(active: !@todolist.active?)
-    @todolist.save
+    todo = Todo.find_by(id: params[:id])
+    @todo = Todo.status_update(todo)
   end
 
 
@@ -45,7 +36,6 @@ class TodosController < ApplicationController
     @todo.destroy
     url = Rails.application.routes.recognize_path(request.referrer)
     redirect_to root_path if (url[:action] == 'show')
-
   end
 
   #show todo link and comments
@@ -58,14 +48,7 @@ class TodosController < ApplicationController
   #to change prority
   def change_position
     @todo = (Todo.todojoinshare.sharedtodo(params[:id],current_user.id))[0]
-    case params[:arrow]
-    when "up"
-      @arrow = "up"
-      Todo.position_up(@todo,current_user)
-    when "down"
-      @arrow = "down"
-      Todo.position_down(@todo,current_user)
-    end
+    @arrow = Todo.position_update(params,current_user)
   end
 
   private
@@ -73,6 +56,5 @@ class TodosController < ApplicationController
   def todo_params
     params.require(:todo).permit(:body, :active).merge("user_id" => current_user.id)
   end
-
 
 end
