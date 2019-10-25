@@ -16,7 +16,7 @@
   </div>
 </div>
 <div class="text-muted">
-  <%= @todo_details.created_at.strftime('%l.%M %P, %-d %B %Y') %>
+  <%= format_time(@todo_details.created_at) %>
 </div>
 <div class="task-complete">
   <p>Task Completion</p>

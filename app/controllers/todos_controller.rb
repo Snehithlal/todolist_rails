@@ -4,6 +4,7 @@ class TodosController < ApplicationController
   respond_to :html
   before_action :find_todo, only: %i[destroy status_update]
   before_action :find_todo_details, only: %i[show change_position]
+  helper FormatedTime
 
   def index
     @list_todos = Todo.check_params(params, current_user)

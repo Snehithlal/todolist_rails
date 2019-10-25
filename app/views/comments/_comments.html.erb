@@ -5,7 +5,7 @@
   </div>
   <div class="comment-foot">
     <div class="comment-name"><%= comment.name %> </div>
-    <div class="comment-time">on <%= comment.created_at.strftime('%l.%M %P, %-d %B %Y') %> </div>
+    <div class="comment-time">on <%= format_time(comment.created_at)%> </div>
   </div>
 </div>
 <%end%>

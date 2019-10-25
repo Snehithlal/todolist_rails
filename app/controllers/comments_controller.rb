@@ -2,6 +2,7 @@
 
 class CommentsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  helper FormatedTime
   respond_to :js
 
   # create comment from comment box and progressbar

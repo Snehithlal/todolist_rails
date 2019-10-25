@@ -25,7 +25,7 @@ class Share < ApplicationRecord
       break if user == '0'
 
       share = @shared_todos.find_by(user_id: user)
-      next unless share.present?
+      next unless share.nil?
 
       current_priority = Todo.search_index(user)
       add_share = Share.new(user_id: user, todo_id: params[:todo_id], is_owner: false, priority: current_priority + 1)
