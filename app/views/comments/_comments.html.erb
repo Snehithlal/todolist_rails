@@ -1,13 +1,10 @@
 <% unless comment.id.nil? %>
-
-
-<!-- <p> com[0][0] <span class="green"> com[0][1] </span> com[1][0] <span class = "green"> com[1][1] </span></p> -->
 <div class="comment">
   <div class="comment-body">
-    <p><%=comment.body.html_safe%></p>
+    <p><%= raw comment.body%></p>
   </div>
   <div class="comment-foot">
-    <div class="comment-name"><%= User.find(comment.user_id)[:name] %> </div>
+    <div class="comment-name"><%= comment.name %> </div>
     <div class="comment-time">on <%= comment.created_at.strftime('%l.%M %P, %-d %B %Y') %> </div>
   </div>
 </div>

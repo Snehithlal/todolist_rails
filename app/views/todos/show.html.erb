@@ -1,196 +1,203 @@
 <div class="search-box">
-<%= text_field_tag :search , "", placeholder: "search",autofocus: true, class: "search"%>
+  <%= text_field_tag :search , "", placeholder: "search",autofocus: true, class: "search"%>
 </div>
 
 <div class="back"><%= link_to "< Go back to home", root_path %></div>
 <div class="show-todos"></div>
-  <div class="todo-details">
-    <div class="row">
-      <div class="col-11 todo-body">
-        <%= @todo_details.body %>
-      </div>
-      <div class="col-1 flex-fill border-0">
-        <%= link_to todo_path(@todo_details), method: :delete, data: { confirm: 'Are you sure?' }, :local => true, :class => 'delete_todo' do %>
-          <i class="material-icons arrows">clear</i>
-        <%end%>
-      </div>
+<div class="todo-details">
+  <div class="row">
+    <div class="col-11 todo-body">
+      <%= @todo_details.body %>
     </div>
-    <div class="text-muted">
-      <%= @todo_details.created_at.strftime('%l.%M %P, %-d %B %Y') %>
-    </div>
-      <div class="task-complete">
-        <p>Task Completion</p>
-      </div>
-      <div class="row task-status">
-        <div class="progress col-11">
-          <div class="progress-bar" role="progressbar" style="width: <%=@todo_details.task_status%>%;" aria-valuenow="<%=@todo_details.task_status%>" aria-valuemin="0" aria-valuemax="100"><span class="task-percentage"><%=@todo_details.task_status%>%</span></div>
-        </div>
-        <div class="flex-fill border-0 col-1 todo-img">
-          <%= link_to todos_status_update_path(id:@todo_details.id), data: { remote: true, url: url_for(action: :status_update), method: :post } do %>
-          <div class=" img-check material-icons">check_circle</div>
-          <%end%>
-        </div>
-      </div>
-
-    <div class="share">
-      <p><span class="sharedwith">Shared with:</span><span class="shared-with">
-          <%@shared_with.each do |user| %>
-          <%= render '/shares/shared_users', user: user %>
-          <%end%>
-      </span></p>
-    </div>
-
-    <div><button type="button" class="btn btn-outline-secondary">Share this</button></div>
-
+    <div class="col-1 flex-fill border-0">
+      <%= link_to todo_path(@todo_details), method: :delete, data: { confirm: 'Are you sure?' }, :local => true, :class => 'delete_todo' do %>
+      <i class="material-icons arrows">clear</i>
+    <%end%>
   </div>
-
-
-  <div id="overlay">
-    <div class="user-list">
-      <div class="add-people">
-        Add people to this task
-      </div>
-      <div class="shared-users">
-        <%unless @users.nil?%>
-          <%@users.each do |user|%>
-            <%= render '/shares/sharelist', user: user%>
-          <%end%>
-        <%end%>
-
-      </div>
-      <div class="user-footer">
-        <div class="save-share">
-          <button type="button" class="save-share-btn">Save</button>
-        </div>
-        <div class="cancel-share" onclick="off()">
-            Cancel
-        </div>
-      </div>
-    </div>
+</div>
+<div class="text-muted">
+  <%= @todo_details.created_at.strftime('%l.%M %P, %-d %B %Y') %>
+</div>
+<div class="task-complete">
+  <p>Task Completion</p>
+</div>
+<div class="row task-status">
+  <div class="progress col-11">
+    <div class="progress-bar" role="progressbar" style="width: <%=@todo_details.task_status%>%;" aria-valuenow="<%=@todo_details.task_status%>" aria-valuemin="0" aria-valuemax="100">
+      <span class="task-percentage"><%=@todo_details.task_status%>%</span></div>
   </div>
+  <div class="flex-fill border-0 col-1 todo-img">
+    <%= link_to todos_status_update_path(id:@todo_details.id), data: { remote: true, url: url_for(action: :status_update), method: :post } do %>
+    <div class=" img-check material-icons">check_circle</div>
+  <%end%>
+</div>
+</div>
 
-  <div class="comment-list">
-    <% @comments.each do |comment|%>
-      <%= render '/comments/comments', comment: comment%>
-    <% end %>
+<div class="share">
+<p>
+  <span class="sharedwith">Shared with:</span>
+  <span class="shared-with">
+    <%@shared_with.each do |user| %>
+      <%= render '/shares/shared_users', user: user %>
+    <%end%>
+  </span>
+</p>
+</div>
+
+<div>
+<button type="button" class="btn btn-outline-secondary">Share this</button>
+</div>
+
+</div>
+
+<div id="overlay">
+<div class="user-list">
+<div class="add-people">
+  Add people to this task
+</div>
+<div class="shared-users">
+  <%unless @users.nil?%>
+    <%@users.each do |user|%>
+      <%= render '/shares/sharelist', user: user%>
+    <%end%>
+  <%end%>
+
+</div>
+<div class="user-footer">
+  <div class="save-share">
+    <button type="button" class="save-share-btn">Save</button>
   </div>
-
-  <div class="comment-box">
-    <%= render '/comments/form' %>
+  <div class="cancel-share" onclick="off()">
+    Cancel
   </div>
+</div>
+</div>
+</div>
 
+<div class="comment-list">
+<% @comments.each do |comment|%>
+<%= render '/comments/comments', comment: comment%>
+<% end %>
+</div>
 
+<div class="comment-box">
+<%= render '/comments/form' %>
+</div>
 
+<script>
+var todo_id = <%= @todo_details.id %>;
+var current_user_id = <%= @todo_details.user_id %>;
+var todo_owner = <%= @todo_details.is_owner %>;
+var is_todo_active = <%= @todo_details.active? %>;
 
+function off() {
+document.getElementById("overlay").style.display = "none";
+}
 
-  <script>
-    var todo_id = <%= @todo_details.id %>;
-    var current_user_id = <%= @todo_details.user_id %>;
-    var todo_owner = <%= @todo_details.is_owner %>;
-    var is_todo_active = <%= @todo_details.active? %>;
+//add class during startup for ok icon
+if (is_todo_active) {
+$(".img-check").addClass("check");
+} else {
+$(".img-check").addClass("inactive");
+}
 
-    function off() {
-      document.getElementById("overlay").style.display = "none";
+//hide from other users
+if (!todo_owner) {
+$('.delete_todo, .todo-img, .btn').hide();
+}
+
+//change the progress when clicked
+$('.progress').click(function (event) {
+var currentProgress = $('.progress-bar').attr('aria-valuenow');
+var xPosition = event.pageX - $(this).offset().left;
+var width = (((($(this).children())[0])["style"])["width"]);
+var newProgress = Math.round((xPosition / 575) * 100);
+if (newProgress <= 100 && newProgress >= 0) {
+
+  //remotely sent status to comment controller
+  $.ajax({
+    type: 'POST',
+    url: '/todos/' + todo_id + '/comments',
+    data: {
+      new_status: newProgress,
+      old_status: currentProgress
+    },
+    success: function () {
+      if (width != newProgress + "%") {
+        $('.progress-bar').css('width', newProgress + '%');
+        $('.progress-bar').attr('aria-valuenow', newProgress);
+        $('.progress-bar').text(newProgress + "%");
+      }
     }
-
-    //add class during startup for ok icon
-    if (is_todo_active){
-      $(".img-check").addClass("check");
-    }else{
-      $(".img-check").addClass("inactive");
-    }
-
-    //hide from other users
-    if (!todo_owner){
-      $('.delete_todo, .todo-img, .btn').hide();
-    }
-
-    //change the progress when clicked
-    $('.progress').click(function(event){
-      var currentProgress = $('.progress-bar').attr('aria-valuenow');
-      var xPosition = event.pageX - $(this).offset().left;
-      var width = (((($(this).children())[0])["style"])["width"]);
-      var newProgress = Math.round((xPosition/575)*100);
-      if (newProgress <= 100 && newProgress >= 0){
-
-      //remotely sent status to comment controller
-      $.ajax({
-        type: 'POST',
-        url: '/todos/' + todo_id + '/comments',
-        data: {new_status: newProgress, old_status: currentProgress},
-        success: function(){
-          if (width != newProgress+"%"){
-            $('.progress-bar').css('width',newProgress+'%');
-            $('.progress-bar').attr('aria-valuenow',newProgress);
-            $('.progress-bar').text(newProgress+"%");
-          }
-        }
-      });
-    }
-    });
-
-    //view users to share and show overlay effect
-    $(".btn").click(function(){
-      document.getElementById("overlay").style.display = "block";
-      $.ajax({
-          type: 'GET',
-          url: '/shares/',
-          data: {todo_id: todo_id, current_user_id: current_user_id}
-      });
-    });
-
-    // change status of the image ok button
-    $(".img-check").click(function(){
-    var is_active = $(".img-check").hasClass("inactive")
-    if(is_active){
-      $(".img-check").removeClass("inactive");
-      $(".img-check").addClass("check");
-    }else{
-        $(".img-check").removeClass("check");
-        $(".img-check").addClass("inactive");
-    }
-    });
-
-  //save button clicked
-  $(".save-share-btn").click(function(){
-    off();
-    var users = new Array();
-    $("input[name='user-check']:checked").each(function(i) {
-       users.push($(this).attr("id"));
-     });
-
-     if (users.length == 0){
-       users.push(0);
-     }
-     $.ajax({
-         type: 'POST',
-         url: '/shares/',
-         data: {user_array: users,todo_id: todo_id}
-     });
   });
+}
+});
 
-  //Remove comm from last name
-  $(".comma").last().remove();
+//view users to share and show overlay effect
+$(".btn").click(function () {
+document.getElementById("overlay").style.display = "block";
+$.ajax({
+  type: 'GET',
+  url: '/shares/',
+  data: {
+    todo_id: todo_id,
+    current_user_id: current_user_id
+  }
+});
+});
 
-  //for search field
-  $("#search").keyup(function() {
+// change status of the image ok button
+$(".img-check").click(function () {
+var is_active = $(".img-check").hasClass("inactive")
+if (is_active) {
+  $(".img-check").removeClass("inactive");
+  $(".img-check").addClass("check");
+} else {
+  $(".img-check").removeClass("check");
+  $(".img-check").addClass("inactive");
+}
+});
 
-    if (($("#search").val()) == ''){
-      $(".show-todos").hide();
-      $('.todo-details,.overlay,.comment-list,.comment-box').show();
-    }else{
-      $(".show-todos").empty();
-      $(".show-todos").show();
-      $('.todo-details,.overlay,.comment-list,.comment-box').hide();
-    }
-    $.ajax({
-       url: '/todos/search',
-       data: {search: $(this).val()}
-    });
-  });
+//save button clicked
+$(".save-share-btn").click(function () {
+off();
+var users = new Array();
+$("input[name='user-check']:checked").each(function (i) {
+  users.push($(this).attr("id"));
+});
 
+if (users.length == 0) {
+  users.push(0);
+}
+$.ajax({
+  type: 'POST',
+  url: '/shares/',
+  data: {
+    user_array: users,
+    todo_id: todo_id
+  }
+});
+});
 
+//Remove comm from last name
+$(".comma").last().remove();
 
+//for search field
+$("#search").keyup(function () {
 
-
-  </script>
+if (($("#search").val()) == '') {
+  $(".show-todos").hide();
+  $('.todo-details,.overlay,.comment-list,.comment-box').show();
+} else {
+  $(".show-todos").empty();
+  $(".show-todos").show();
+  $('.todo-details,.overlay,.comment-list,.comment-box').hide();
+}
+$.ajax({
+  url: '/todos/search',
+  data: {
+    search: $(this).val()
+  }
+});
+});
+</script>

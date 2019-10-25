@@ -1,12 +1,12 @@
-var current_div = $("#<%=@todo.id%>");
+var current_div = $("#<%=@todo_details.id%>");
 if ("<%=@arrow%>" == "down"){
-  var next_div = $("#<%=@todo.id%>").next();
+  var next_div = $("#<%=@todo_details.id%>").next();
   var current_todo = current_div.clone();
   var next_todo = next_div.clone();
   current_div.replaceWith(next_todo);
   next_div.replaceWith(current_todo);
 }else{
-  var prev_div = $("#<%=@todo.id%>").prev();
+  var prev_div = $("#<%=@todo_details.id%>").prev();
   var current_todo = current_div.clone();
   var prev_todo = prev_div.clone();
   current_div.replaceWith(prev_todo);
