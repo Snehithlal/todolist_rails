@@ -6,14 +6,13 @@ class Todo < ApplicationRecord
   has_many :users, through: :shares, dependent: :destroy
   validates_presence_of :body
 
-  scope :todo_join_share, -> { joins(:shares).select('shares.*,todos.*') }
+
   scope :is_active, ->(keyword) { where('todos.active=?', keyword) }
   scope :user, ->(user) { where('shares.user_id=?', user.id) }
   scope :search, ->(keyword) { where('body LIKE ?', keyword).order(id: :desc) }
-  scope :up, ->(current_todo) { select('todos.*,shares.priority').where('priority>?', current_todo.priority).order(priority: :asc).limit(1)[0] }
-  scope :down, ->(current_todo) { select('todos.*,shares.priority').where('priority<?', current_todo.priority).order(priority: :desc).limit(1)[0] }
+  scope :up, ->(current_todo) { select('todos.*,shares.priority').where('priority>?', current_todo[0].priority).is_active(current_todo[0].active?).order(priority: :asc).limit(1)[0] }
+  scope :down, ->(current_todo) { select('todos.*,shares.priority').where('priority<?', current_todo[0].priority).is_active(current_todo[0].active?).order(priority: :desc).limit(1)[0] }
   scope :pagination, ->(keyword) { order(priority: :desc).paginate(page: keyword, per_page: 4) }
-  scope :sharedtodo, ->(todoid, userid) { where('todos.id=? and shares.user_id=?', todoid, userid) }
 
   # create todo and update priority
   def self.create_todo(todo_params, current_user)
@@ -38,43 +37,36 @@ class Todo < ApplicationRecord
   # calling from each method
   def self.print_todos(status, params, current_user)
     if status == 0
-      todo_join_share.user(current_user).pagination(params[:page])
+      current_user.get_todos.pagination(params[:page])
     else
-      todo_join_share.is_active(status).user(current_user).pagination(params[:page])
+      current_user.get_active_todos(status).pagination(params[:page])
     end
   end
 
   # positionchange
   def self.position_update(params, current_user)
-    todo = Todo.todo_join_share.sharedtodo(params[:id], current_user.id)[0]
+    current_todo =  current_user.get_current_todo(params[:id])
     case params[:arrow]
     when 'up'
-      arrow = 'up'
-      position_up(todo, current_user)
+      new_todo = current_user.get_next_todo(current_todo)
     when 'down'
-      arrow = 'down'
-      position_down(todo, current_user)
+      new_todo = current_user.get_previous_todo(current_todo)
+    end
+    if new_todo.present?
+      position_change(current_todo, new_todo, current_user)
+      arrow = params[:arrow]
     end
     arrow
   end
 
-  # position_up
-  def self.position_up(current_todo, current_user)
-    previous_todo = Todo.joins(:shares).is_active(current_todo.active?).user(current_user).up(current_todo)
-    previous_priority = previous_todo[:priority]
-    current_priority = current_todo[:priority]
-    current_todo.shares.where(user_id: current_user.id)[0].update(priority: previous_priority)
-    previous_todo.shares.where(user_id: current_user.id)[0].update(priority: current_priority)
+  # positionchange
+  def self.position_change(current_todo, new_todo, current_user)
+    new_priority = new_todo[:priority]
+    current_priority = current_todo[0].priority
+    current_todo[0].shares.where(user_id: current_user.id)[0].update(priority: new_priority)
+    new_todo.shares.where(user_id: current_user.id)[0].update(priority: current_priority)
   end
 
-  # position_down
-  def self.position_down(current_todo, current_user)
-    next_todo = Todo.joins(:shares).is_active(current_todo.active?).user(current_user).down(current_todo)
-    next_priority = next_todo[:priority]
-    current_priority = current_todo[:priority]
-    current_todo.shares.where(user_id: current_user.id)[0].update(priority: next_priority)
-    next_todo.shares.where(user_id: current_user.id)[0].update(priority: current_priority)
-  end
 
   # search for index
   def self.search_index(current_user_id)
@@ -95,9 +87,4 @@ class Todo < ApplicationRecord
     end
   end
 
-  # status_update
-  def self.status_update(todo)
-    todo.update(active: !todo.active?)
-    todo
-  end
 end

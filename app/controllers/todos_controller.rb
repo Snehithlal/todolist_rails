@@ -10,9 +10,9 @@ class TodosController < ApplicationController
     @list_todos = Todo.check_params(params, current_user)
   end
 
-  def new
-    @todo = Todo.new
-  end
+  # def new
+  #   @todo = Todo.new
+  # end
 
   # create todo and update priority added with last priority
   def create
@@ -27,7 +27,8 @@ class TodosController < ApplicationController
 
   # to change active status by checking db value when clicked tickbox
   def status_update
-    @todo_details = Todo.status_update(@todo)
+    @todo.update(active: !@todo.active?)
+    @todo_details = @todo
   end
 
   # destroy parameters
@@ -51,7 +52,7 @@ class TodosController < ApplicationController
   private
 
   def todo_params
-    params.require(:todo).permit(:body, :active).merge('user_id' => current_user.id)
+    params.require(:todo).permit(:body, :active)
   end
 
   def find_todo
@@ -59,6 +60,6 @@ class TodosController < ApplicationController
   end
 
   def find_todo_details
-    @todo_details = Todo.todo_join_share.sharedtodo(params[:id], current_user.id)[0]
+    @todo_details = current_user.get_current_todo(params[:id])[0]
   end
 end

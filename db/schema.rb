@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_17_122936) do
+ActiveRecord::Schema.define(version: 2019_11_04_090648) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.text "body"
@@ -36,11 +36,9 @@ ActiveRecord::Schema.define(version: 2019_10_17_122936) do
   create_table "todos", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "body"
     t.boolean "active", default: true
-    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "task_status", default: 0
-    t.index ["user_id"], name: "index_todos_on_user_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -60,5 +58,4 @@ ActiveRecord::Schema.define(version: 2019_10_17_122936) do
   add_foreign_key "comments", "users"
   add_foreign_key "shares", "todos"
   add_foreign_key "shares", "users"
-  add_foreign_key "todos", "users"
 end
