@@ -1,2 +1,9 @@
-$('#<%= j @todo.id %>').remove();
+<%if @todo.is_a?Hash%>
+  $(".err_msg").show();
+  $(".err_msg").html('<%= @todo[:error]%>').delay(2000).fadeOut();
+  setTimeout("location.reload(true);",2000);
+<%else%>
+$(".err_msg").hide();
+  $('#<%= j @todo.id %>').remove();
+<%end%>
 reset_arrow();

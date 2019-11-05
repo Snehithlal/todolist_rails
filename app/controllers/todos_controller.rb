@@ -33,9 +33,14 @@ class TodosController < ApplicationController
 
   # destroy parameters
   def destroy
-    @todo.destroy
-    url = Rails.application.routes.recognize_path(request.referrer)
-    redirect_to root_path if url[:action] == 'show'
+    if @todo.present?
+      @todo.destroy
+      url = Rails.application.routes.recognize_path(request.referrer)
+      redirect_to root_path if url[:action] == 'show'
+    else
+      @todo = { error: "already deleted" }
+    end
+
   end
 
   # show todo link and comments

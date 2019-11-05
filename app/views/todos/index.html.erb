@@ -8,6 +8,7 @@
   <%= radio_button_tag 'active', 'inactive', false, data: { remote: true, method: :get } %>
   <label for="active_inactive">Inactive</label>
 </div>
+<div class="err_msg"></div>
 <div class="apple_pagination"><%= will_paginate @list_todos %></div>
 <div class="todolist">
   <% if !@list_todos.empty? %>

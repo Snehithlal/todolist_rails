@@ -1,8 +1,14 @@
+<% if @todolist.is_a?Hash %>
+  $(".err_msg").show();
+  $(".err_msg").html('<% @todolist[:error].each do |msg|%> <%=msg%></br> <%end%>').delay(3000).fadeOut();
+<%else%>
+$(".err_msg").hide();
 if('<%=@count%>'== 1){
   $(".todolist").html("<%= escape_javascript render(:partial => 'todolist', :locals => { :todo => @todolist  }) %>");
 }else{
   $(".todolist").prepend("<%= escape_javascript render(:partial => 'todolist', :locals => { :todo => @todolist }) %>");
 }
+<%end%>
 
 $('.createtodo').val('');
 reset_arrow();

@@ -6,7 +6,6 @@ class Todo < ApplicationRecord
   has_many :users, through: :shares, dependent: :destroy
   validates_presence_of :body
 
-
   scope :is_active, ->(keyword) { where('todos.active=?', keyword) }
   scope :user, ->(user) { where('shares.user_id=?', user.id) }
   scope :search, ->(keyword) { where('body LIKE ?', keyword).order(id: :desc) }
@@ -20,6 +19,8 @@ class Todo < ApplicationRecord
     if todo.save
       Share.add_priority(todo, current_user)
       Todo.print_todos(true, todo_params, current_user).where(id: todo.id)[0]
+    else
+      { error: todo.errors.full_messages }
     end
   end
 
@@ -55,8 +56,9 @@ class Todo < ApplicationRecord
     if new_todo.present?
       position_change(current_todo, new_todo, current_user)
       arrow = params[:arrow]
+    else
+      { error: new_todo.errors.full_messages }
     end
-    arrow
   end
 
   # positionchange

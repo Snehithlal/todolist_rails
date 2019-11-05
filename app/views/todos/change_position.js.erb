@@ -1,3 +1,8 @@
+<% if @arrow.is_a?Hash %>
+  $(".err_msg").show();
+  $(".err_msg").html('<% @todolist[:error].each do |msg|%> <%=msg%></br> <%end%>').delay(3000).fadeOut();
+<%else%>
+$(".err_msg").hide();
 var current_div = $("#<%=@todo_details.id%>");
 if ("<%=@arrow%>" == "down"){
   var next_div = $("#<%=@todo_details.id%>").next();
@@ -12,4 +17,5 @@ if ("<%=@arrow%>" == "down"){
   current_div.replaceWith(prev_todo);
   prev_div.replaceWith(current_todo);
 }
+<%end%>
 reset_arrow();
